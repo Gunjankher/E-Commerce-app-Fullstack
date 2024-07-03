@@ -7,6 +7,10 @@ import { Suspense, lazy } from 'react'
 import Loader from './components/Loader.jsx'
 
 
+const Home = lazy(()=> import('./Pages/Home.jsx'))
+const Cart = lazy(()=> import('./Pages/Cart.jsx'))
+const Search = lazy(()=> import('./Pages/Search.jsx'))
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>\
@@ -16,7 +20,25 @@ const router = createBrowserRouter(
     path='/'
     element ={
       <Suspense fallback={<Loader />}>
-  
+  <Home />
+    </Suspense>
+    }
+    />
+    
+    <Route 
+    path='/cart'
+    element ={
+      <Suspense fallback={<Loader />}>
+  <Cart/>
+    </Suspense>
+    }
+    />
+    
+    <Route 
+    path='/search'
+    element ={
+      <Suspense fallback={<Loader />}>
+  <Search />
     </Suspense>
     }
     />
