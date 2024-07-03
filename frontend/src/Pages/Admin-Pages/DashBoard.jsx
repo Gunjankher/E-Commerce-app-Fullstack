@@ -1,15 +1,15 @@
 import React from 'react'
 
 
-import AdminSideBar from '../components/AdminSideBar'
-import Input from "../components/Input"
-import Widget from '../components/Widget'
-import CategoryItem from '../components/CategoryItem'
-import data from '../assets/data.json'
-import { BarChart,DoughnutChart } from '../components/Chart'
-import DashBoardTable from '../components/DashBoardTable'
+import AdminSideBar from './../../components/Admin-components/AdminSideBar'
+import Input from "../../components/Admin-components/Input"
+import Widget from "../../components/Admin-components/Widget"
+import CategoryItem from "../../components/Admin-components/CategoryItem"
+import data from '../../assets/data.json'
+import { BarChart,DoughnutChart } from "../../components/Admin-components/Chart"
+import DashBoardTable from "../../components/Admin-components/DashBoardTable"
 
-import userImg from "../assets/profile.jpg"
+import userImg from "../../assets/profile.jpg"
 import { FaRegBell } from "react-icons/fa"
 import { BsSearch } from "react-icons/bs"
 import { BiMaleFemale } from "react-icons/bi"

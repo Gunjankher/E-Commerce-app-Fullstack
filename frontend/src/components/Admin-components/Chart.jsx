@@ -11,7 +11,7 @@ import {
   LineElement,
   PointElement,
   Filler
-} from 'chart.js';
+} from "chart.js"
 import { Bar,Doughnut,Pie,Line } from 'react-chartjs-2';
 
 ChartJS.register(
