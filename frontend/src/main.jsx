@@ -6,6 +6,7 @@ import {createBrowserRouter,createRoutesFromElements,Routes,RouterProvider,Route
 import { Suspense, lazy } from 'react'
 import Loader from './components/Loader.jsx'
 
+
 // ADMIN ROUTES
 
 const DashBoard = lazy(()=> import('./Pages/Admin-Pages/DashBoard.jsx'))
@@ -173,7 +174,6 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
     <RouterProvider router={router} />
   </React.StrictMode>,
 )
