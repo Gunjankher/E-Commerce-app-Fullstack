@@ -1,0 +1,66 @@
+.transation-container{
+
+  
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem 2rem 0;
+    height: 30rem;
+
+    > div {
+      background-color: white;
+      box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.132);
+      border-radius: 10px;
+    }
+    .gender-chart{
+        width: 100%;
+        max-width: 20rem;
+        padding: 1rem;
+        position: relative;
+        > h2 {
+          text-align: center;
+          margin: 1.5rem 0 2rem 0;
+          @include heading;
+        }
+        > p {
+          @include posCenter;
+          font-size: 2rem;
+          color: rgba(0, 0, 0, 0.634);
+        }
+    }
+
+    .transaction-box {
+      width: 100%;
+      padding: 1rem;
+      overflow-x: auto;
+      > h2 {
+        margin: 1.5rem 0 0 0;
+        @include heading;
+      }}
+
+}
+
+.chartContainer {
+  background-color: white;
+  padding: 4rem;
+  overflow-y: auto;
+  > h1 {
+    margin: 0 0 5rem 2rem;
+  }
+  > section {
+    width: 80%;
+    margin: 4rem auto;
+
+    > div {
+      max-width: 25rem;
+      margin: auto;
+      margin-top: 6rem;
+      margin-bottom: -1rem;
+    }
+
+    > h2 {
+      margin: 2rem 0;
+      text-align: center;
+      @include heading(2px);
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.input-container {
+    width: 100%;
+  }
+  
+  .input-label {
+    display: inline-block;
+    margin-bottom: 0.25rem;
+    padding-left: 0.25rem;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    color: black;
+    outline: none;
+    border: 1px solid #e5e7eb; // border-gray-200
+    transition: background-color 0.2s;
+  
+    &:focus {
+      background-color: #f9fafb; // bg-gray-50
+    }
+  }
+  

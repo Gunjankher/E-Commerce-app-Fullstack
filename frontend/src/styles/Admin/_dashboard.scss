@@ -1,0 +1,66 @@
+@import "input";
+@import "widget";
+@import "inventory";
+@import "chart";
+@import "products";
+
+
+.dashboard{
+    overflow-y: auto;
+
+    .bar{
+        height: 4rem;
+        @include flex(row,unset);
+        padding : 0 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.3);
+   
+
+    img{
+        width: 23px;
+        height: 20px;
+        border-radius: 229px;
+        border: 1px solid black;
+        margin-right: 5px;
+    }
+    svg{
+        margin-right: 5px;
+    }
+}
+
+.WidgetContainer{
+
+@include flex(row,space-between,stretch,2rem);
+padding : 2rem 2rem 2rem 0;
+
+}
+
+
+.graph-container{
+    @include flex(row,unset,unset,2rem);
+    padding : 0 2rem 2rem 0;
+
+    >div{
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    .revenue-chart{
+        width: 100%;
+        padding : 1rem 3rem;
+
+>h2{
+    @include heading;
+    margin :1rem 0 2rem 0.25rem;
+    text-align : center
+}
+    }
+
+}
+
+
+
+
+
+}
+
+
