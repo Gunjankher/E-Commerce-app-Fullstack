@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './styles/app.scss'
-import {createBrowserRouter,createRoutesFromElements,Routes,RouterProvider,Route} from 'react-router-dom'
+import {createBrowserRouter,createRoutesFromElements,Routes,RouterProvider,Route,BrowserRouter} from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import Loader from './components/Loader.jsx'
 
@@ -39,11 +39,10 @@ const Search = lazy(()=> import('./Pages/Search.jsx'))
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>\
-
+    <>
+<Route path='/' element={<App />}>
 
     <Route 
-    path='/'
     element ={
       <Suspense fallback={<Loader />}>
   <Home />
@@ -164,7 +163,7 @@ const router = createBrowserRouter(
         </Suspense>
       } />
       
-    
+      </Route>
     </>
   )
 )
