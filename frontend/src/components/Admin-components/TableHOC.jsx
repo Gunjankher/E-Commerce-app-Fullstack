@@ -40,9 +40,9 @@ function TableHOC(columns, data, containerClassname, heading, showPagination = f
         <table className="table" {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr key={headerGroup.id}{...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th key={column.id} {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
                     {column.isSorted && (
                       <span>
@@ -64,9 +64,9 @@ function TableHOC(columns, data, containerClassname, heading, showPagination = f
               prepareRow(row);
 
               return (
-                <tr {...row.getRowProps()}>
+                <tr key={row.id} {...row.getRowProps()}>
                   {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <td  key={cell.column.id}{...cell.getCellProps()}>{cell.render("Cell")}</td>
                   ))}
                 </tr>
               );

@@ -1,8 +1,9 @@
 import React from 'react'
 
-import AdminSideBar from '../../components/AdminSideBar';
-import { PieChart,DoughnutChart } from "../../components/Chart";
-import {categories} from '../../assets/data.json'
+
+import AdminSideBar from '../../../components/Admin-components/AdminSideBar'
+import { PieChart,DoughnutChart } from "../../../components/Admin-components/Chart";
+import {categories} from '../../../assets/data.json'
 
 
 

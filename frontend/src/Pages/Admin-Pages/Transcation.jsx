@@ -1,8 +1,9 @@
 import React from 'react'
-import AdminSideBar from '../components/AdminSideBar'
+
+import AdminSideBar from './../../components/Admin-components/AdminSideBar'
 import { Column } from "react-table";
 import { ReactElement, useState, useCallback } from "react";
-import TableHOC from "../components/TableHOC";
+import TableHOC from "../../components/Admin-components/TableHOC";
 import { Link } from "react-router-dom";
 
 

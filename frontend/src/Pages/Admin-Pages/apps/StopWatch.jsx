@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import AdminSideBar from '../../components/AdminSideBar'
+
+import AdminSideBar from './../../../components/Admin-components/AdminSideBar.jsx'
 
 const timeinformat =(timeinSeconds)=>{
 const hour = Math.floor(timeinSeconds/3600)

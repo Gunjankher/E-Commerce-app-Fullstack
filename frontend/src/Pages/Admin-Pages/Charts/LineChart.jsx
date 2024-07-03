@@ -1,6 +1,7 @@
 import React from 'react'
-import AdminSideBar from '../../components/AdminSideBar'
-import { LineChart } from '../../components/Chart'
+
+import AdminSideBar from "../../../components/Admin-components/AdminSideBar"
+import { LineChart } from "../../../components/Admin-components/Chart";
 
 
 const months = [

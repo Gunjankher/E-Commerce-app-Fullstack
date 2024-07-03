@@ -1,5 +1,5 @@
 import React, { useId } from 'react';
-import '../styles/_input.scss';
+import '../../styles/Admin/_input.scss';
 
 const Input = React.forwardRef(function Input({
   label,

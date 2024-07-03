@@ -1,7 +1,7 @@
 import React from 'react'
 
-import AdminSideBar from '../../components/AdminSideBar';
-import { BarChart } from "../../components/Chart";
+import AdminSideBar from './../../../components/Admin-components/AdminSideBar'
+import { BarChart } from "../../../components/Admin-components/Chart";
 
 const months = [
   "January",
