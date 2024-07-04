@@ -19,7 +19,7 @@ const logoutHandlar= ()=>{
 
   return (
     <nav className='header'>
-      <Link onClick={()=> setIsopen(true)} to={'/'}>Home</Link> 
+      <Link onClick={()=> setIsopen(true)} to={'/'}>HOME</Link> 
      <Link onClick={()=> setIsopen(false)} to={"/search"}><FaSearch/></Link>
      <Link onClick={()=> setIsopen(false)}to={'/cart'}><FaShoppingBag /></Link> 
 
