@@ -1,7 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import ProductCard from '../components/ProductCard'
+
+
+const img = 'https://m.media-amazon.com/images/I/71jG+e7roXL._AC_UY218_.jpg'
 
 function Home() {
+
+
+  const addToCartHandlar = ()=>{
+
+  }
 
   return (
     <div className='home'>
@@ -13,7 +22,18 @@ function Home() {
       More
   </Link>
       </h1> 
-      <main></main>
+      <main>
+<ProductCard 
+productId="sfsfsf"
+name="Macbook"
+price={45644}
+stock={50}
+handler={addToCartHandlar}
+photo={img}
+
+/>
+
+      </main>
     </div>
   )
 }
