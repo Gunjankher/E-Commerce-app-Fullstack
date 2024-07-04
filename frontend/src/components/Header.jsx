@@ -1,34 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
 import {FaSearch, FaShoppingBag, FaSignInAlt, FaUser,FaSignOutAlt} from "react-icons/fa"
 
 const user = {
   _id : "gg",
-  role :"user",
+  role :"admin",
 }
 
 function Header() {
+
+const [isopen,setIsopen] = useState(false)
+
+
+const logoutHandlar= ()=>{
+  setIsopen(false)
+}
+
+
   return (
-    <nav>
-      <Link to={'/'}>Home</Link> 
-     <Link to={"/search"}><FaSearch/></Link>
-     <Link to={'/cart'}><FaShoppingBag /></Link> 
+    <nav className='header'>
+      <Link onClick={()=> setIsopen(true)} to={'/'}>Home</Link> 
+     <Link onClick={()=> setIsopen(false)} to={"/search"}><FaSearch/></Link>
+     <Link onClick={()=> setIsopen(false)}to={'/cart'}><FaShoppingBag /></Link> 
 
 {
 user?._id?(
   <>
-  <button>
+  <button onClick={()=> setIsopen((prev)=>!prev)}>
     <FaUser /> 
   </button>
 
-  <dialog open = {true}>
+  <dialog open = {isopen}>
     <div>
       {
         user.role === "admin"&&(
           <Link to="/admin/dashboard">Admin</Link>
         )}
-<Link to="/orders">orders</Link>  
-<button>
+<Link  onClick={()=> setIsopen(false)} to="/orders">orders</Link>  
+<button onClick={logoutHandlar}>
   <FaSignOutAlt />
 </button>
     </div>
