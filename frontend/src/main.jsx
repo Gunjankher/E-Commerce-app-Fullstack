@@ -43,6 +43,7 @@ const router = createBrowserRouter(
 <Route path='/' element={<App />}>
 
     <Route 
+    path='/'
     element ={
       <Suspense fallback={<Loader />}>
   <Home />
