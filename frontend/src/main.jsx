@@ -37,6 +37,7 @@ const Home = lazy(()=> import('./Pages/Home.jsx'))
 const Cart = lazy(()=> import('./Pages/Cart.jsx'))
 const Search = lazy(()=> import('./Pages/Search.jsx'))
 const Shipping = lazy(()=> import('./Pages/Shipping.jsx'))
+const Login = lazy(()=>import('./Pages/Login.jsx'))
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -66,6 +67,14 @@ const router = createBrowserRouter(
     element ={
       <Suspense fallback={<Loader />}>
   <Search />
+    </Suspense>
+    }
+    />
+    <Route 
+    path='/login'
+    element ={
+      <Suspense fallback={<Loader />}>
+  <Login />
     </Suspense>
     }
     />

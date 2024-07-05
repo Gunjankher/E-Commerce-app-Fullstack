@@ -3,8 +3,8 @@ import {Link} from 'react-router-dom'
 import {FaSearch, FaShoppingBag, FaSignInAlt, FaUser,FaSignOutAlt} from "react-icons/fa"
 
 const user = {
-  _id : "gg",
-  role :"admin",
+  _id : "",
+  role :"",
 }
 
 function Header() {
@@ -23,7 +23,7 @@ const logoutHandlar= ()=>{
      <Link onClick={()=> setIsopen(false)} to={"/search"}><FaSearch/></Link>
      <Link onClick={()=> setIsopen(false)}to={'/cart'}><FaShoppingBag /></Link> 
 
-{
+ {
 user?._id?(
   <>
   <button onClick={()=> setIsopen((prev)=>!prev)}>
@@ -43,9 +43,9 @@ user?._id?(
     </div>
   </dialog>
   </>
-):<Link to={'/cart'}>
+):<Link to={"/login"}>
   <FaSignInAlt/>
-  login
+ 
 </Link>
 }
 
