@@ -4,6 +4,7 @@
 @import "cart";
 @import "shipping";
 @import "login";
+@import "search";
 
 .header{
     @include flex(row, flex-end, stretch, 1.2rem);
