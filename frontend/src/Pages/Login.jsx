@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
+import {FcGoogle} from 'react-icons/fc'
 
 function Login() {
+
+const [gender,setGender] = useState("")
+const [date,setDate] = useState("")
+
+
+
+const 
+loginHandler =()=>{
+
+}
+
   return (
     <div className="login">
     <main>
