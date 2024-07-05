@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TableHOC from '../components/Admin-components/TableHOC';
+import { Link } from 'react-router-dom';
 
 function Orders() {
+
+
+
     const column = [
         {
           Header: "ID",
@@ -29,12 +33,21 @@ function Orders() {
         },
       ];
 
-    const Table = TableHOC(column, rows, "dashboard-product-box", "Orders", rows.length > 6)();
+      const [rows,setRows] = useState([{
+        _id : "dfdsgsdg",
+        amount : 5000,
+        discount : 6545,
+        status: <span className="red">Processing</span>,
+        action: <Link to={`/order/dfdsgsdg`}>Manage</Link>,
+
+      },])
+
+    const Table = TableHOC(column, rows, "dashboard-product-box", "Orders", rows.length > 6)
 
     return (
       <div className="container">
         <h1>My Orders</h1>
-        {isLoading ? <Skeleton length={20} /> : Table}
+       <Table />
       </div>
     );
   };
