@@ -70,6 +70,10 @@ const router = createBrowserRouter(
     </Suspense>
     }
     />
+
+
+// Logged in user routes
+
     <Route 
     path='/login'
     element ={
