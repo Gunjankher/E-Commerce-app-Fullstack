@@ -1,0 +1,17 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "This is a Backend for the e comerce project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev" : "nodemon src/index.js"
+  
+    
+  },
+  "author": "Gunjan kher",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
