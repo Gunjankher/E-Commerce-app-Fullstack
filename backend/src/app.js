@@ -17,6 +17,6 @@ app.use(express.static("public"))
 app.use(cookieParser())
 
 
-backed 
+
 
 export  {app}
