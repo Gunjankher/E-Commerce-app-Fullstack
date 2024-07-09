@@ -20,7 +20,7 @@ const newUser = asyncHandler(async(req,res)=>{
    if (user)
     return res.status(200).json({
       success: true,
-      message: `Welcome, ${user.name}`,
+      message: `Welcome, ${user}`
     });
 
 
@@ -43,5 +43,54 @@ user = await User.create({
 
 
 
+const getAllUsers = asyncHandler(async(req,res)=>{
+      const users = await User.find({})
 
-export {newUser}
+      if(users)
+        return res
+    .status(201)
+    .json(new ApiResponse (200,users))
+
+})
+
+
+const getUser = asyncHandler(async (req,res)=>{
+    const id = req.params.id 
+    const user =  await User.findById(id)
+
+if(!user){
+     new ApiError(400, "User is not Found")
+}else{
+    return res
+    .status(200)
+    .json(new ApiResponse(200,user,"User Found SucessFully"))
+}
+
+})
+
+
+const deleteUser = asyncHandler(async(req,res)=>{
+    try {
+        
+const id = req.params.id
+
+const user = await User.findByIdAndDelete(id)
+
+if(!user){
+     return new ApiError(400, "User is not Found")
+}
+return res
+.status(200)
+.json(new ApiError(200, {}, "User Deleted SucessFully"))
+} catch (error) {
+        throw new ApiError(error.message , "Cannot delete User")
+    }
+})
+
+export {
+    newUser,
+    getAllUsers,
+    getUser,
+    deleteUser,
+
+}
