@@ -11,9 +11,8 @@ const storage = multer.diskStorage({
 const id = uuid()
 const extname = file.originalname.split(".").pop()
 
-const fileName = `${id}.${extname}`
 
-      cb(null, fileName)
+      cb(null, `${id}.${extname}`)
     }
   })
   
@@ -22,5 +21,5 @@ const fileName = `${id}.${extname}`
   })
 
 
-  export const singleUpload = upload.single("photo");
+  export const singleUpload = upload.single("photos");
 export const mutliUpload = upload.array("photos", 5);
