@@ -14,13 +14,19 @@ const newProduct = asyncHandler(async (req, res) => {
       // Log incoming data for debugging purposes
       console.log("Incoming data:", { name, price, stock, category, photos,description });
   
+      const photoObj = {
+        public_id: photos.filename, // Assuming the filename is used as the public ID
+        url: photos.path, // Assuming the path is used as the URL
+      };
+
+
       // Create the product
       const product = await Product.create({
         name,
         price,
         stock,
         category: category.toLowerCase(),
-        photos: photos?.url,
+        photos: [photoObj],
         description
       });
   

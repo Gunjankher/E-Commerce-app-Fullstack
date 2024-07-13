@@ -1,4 +1,5 @@
 import multer from "multer"
+import {v4 as uuid} from 'uuid'
 
 
 const storage = multer.diskStorage({
@@ -7,7 +8,12 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
 
-      cb(null, file.originalname)
+const id = uuid()
+const extname = file.originalname.split(".").pop()
+
+const fileName = `${id}.${extname}`
+
+      cb(null, fileName)
     }
   })
   

@@ -25,4 +25,7 @@ import productRouter from './routes/product.router.js'
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/product",productRouter)
 
+
+app.use("/public/temp",express.static("public/temp"))
+
 export  {app}
