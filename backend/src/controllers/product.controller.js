@@ -116,7 +116,7 @@ const getAdminProducts = asyncHandler(async(req,res,next)=>{
   
   
   
-    return res.status(201).json(new ApiResponse(201, product, "Product Created Successfully"));
+    return res.status(201).json(new ApiResponse(201, product, "Product found Successfully"));
   
   } catch (error) {
    console.error("Error finding latest product:", error.message);
@@ -164,7 +164,7 @@ if(!findProducts) return next(new ApiError(404 , "invalid  Product Id"))
 
     if (photos) {
       rm(findProducts.photos, () => {
-        console.log(" old Photo deletedDeleted");
+        console.log(" old Photo Deleted");
       });
 
       findProducts.photos = photoObj
@@ -199,13 +199,13 @@ const deleteProduct = asyncHandler(async(req,res,next)=>{
 
       if (photos) {
         rm(findProducts.photos, () => {
-          console.log(" Product PhotoDeleted");
+          console.log(" Product Photo Deleted");
         });
       }
 await Product.deleteOne()
 
 
-    return res.status(201).json(new ApiResponse(201, "Product deletedSuccessfully"));
+    return res.status(201).json(new ApiResponse(201, "Product deleted Successfully"));
   
       
 }catch (error) {
