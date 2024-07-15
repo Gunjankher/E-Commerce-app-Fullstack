@@ -116,11 +116,13 @@ const getAdminProducts = asyncHandler(async(req,res,next)=>{
   
   
   
-    return res.status(201).json(new ApiResponse(201, product, "Product found Successfully"));
-  
+   if(product)return res.status(201).json(new ApiResponse(201, product, "Product  Successfully"));
+  if(!product) return next(new ApiError(401, error.message, "Cannot find Product"));
+
+
   } catch (error) {
    console.error("Error finding latest product:", error.message);
-     return next(new ApiError(401, error.message, "Cannot find Product"));
+     return next(new ApiError(401,  "Cannot find Product"));
   }
  })
 
@@ -141,33 +143,24 @@ const findProducts = await Product.findById(id)
 if(!findProducts) return next(new ApiError(404 , "invalid  Product Id"))
 
 
-    // Log incoming data for debugging purposes
-    // console.log("Incoming data:", { name, price, stock, category, photos, description });
-
-    // if (!photos) {
-    //   return next(new ApiError(401, "Please Add Photo"));
-    // }
-
-
-    
-    // if (photos.length < 1)
-    //   return next(new ApiError( 400,"Please add atleast one Photo"));
-
-    // if (photos.length > 5)
-    //   return next(new ApiError(400,"You can only upload 5 Photos",));
-
-
-    const photoObj = {
-      public_id: photos.filename, // Assuming the filename is used as the public ID
-      url: photos.path, // Assuming the path is used as the URL
-    };
-
+  
     if (photos) {
-      rm(findProducts.photos, () => {
-        console.log(" old Photo Deleted");
-      });
+      const photoObj = {
+        public_id: photos.filename, // Assuming the filename is used as the public ID
+        url: photos.path, // Assuming the path is used as the URL
+      };
 
-      findProducts.photos = photoObj
+      if (findProducts.photos && findProducts.photos.url) {
+        rm(findProducts.photos.url, (err) => {
+          if (err) {
+            console.error("Error deleting old photo:", err.message);
+          } else {
+            console.log("Old photo deleted");
+          }
+        });
+      }
+
+      findProducts.photos = photoObj;
     }
 
 if(name) findProducts.name = name
@@ -197,9 +190,13 @@ const deleteProduct = asyncHandler(async(req,res,next)=>{
     if(!product) return next(new ApiError(404 , "invalid  Product Id"))
   
 
-      if (photos) {
-        rm(findProducts.photos, () => {
-          console.log(" Product Photo Deleted");
+      if (product.photos && product.photos.url) {
+        rm(product.photos.url, (err) => {
+          if (err) {
+            console.error("Error deleting product photo:", err.message);
+          } else {
+            console.log("Product photo deleted");
+          }
         });
       }
 await Product.deleteOne()
@@ -215,6 +212,26 @@ await Product.deleteOne()
  })
 
 
+
+
+ const getAllProducts = asyncHandler(async(req,res,next)=>{
+try {
+  
+  const {search ,sort, category,price} = req.query
+  const page = Number(process.env.PRODUCT_PER_PAGE) || 8
+  const skip = (page-1)*limit
+
+
+
+  
+
+} catch (error) {
+  
+  console.error("Error deleting  product:", error.message);
+       return next(new ApiError(401, error.message, "Cannot delete Product"));
+}
+
+ })
 
 
 export { newProduct,getlatestProducts,getAllCategories,getAdminProducts,getSingleProduct,updateProduct,deleteProduct};

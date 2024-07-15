@@ -11,7 +11,7 @@ router.route("/new").post(adminOnly,singleUpload,newProduct)
 router.route("/latest").get(getlatestProducts)
 router.route("/categories").get(getAllCategories)
 router.route("/admin-products").get(getAdminProducts)
-router.route("/:id").get(getSingleProduct).put(singleUpload,updateProduct).delete(deleteProduct)
+router.route("/:id").get(getSingleProduct).put(adminOnly,singleUpload,updateProduct).delete(adminOnly,deleteProduct)
 
 
 
