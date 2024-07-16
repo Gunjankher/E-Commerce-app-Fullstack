@@ -222,10 +222,36 @@ try {
   const skip = (page-1)*limit
 
 
+const  baseQuery = {
+ 
+}
 
-  
 
-} catch (error) {
+
+
+ if(search)
+  baseQuery.name = {
+    $regex : search,
+    $options :"i"
+    }
+
+
+    if(price)
+      baseQuery.price  = {
+        $lte :Number(price)
+      }
+
+      if(category) baseQuery.category = category
+
+
+const products = await Product.find(baseQuery).sort(
+  sort && {price : sort === "asc"? 1 : -1})
+  .limit(limit)
+  .skip(skip)
+
+  const totalPage = Math.ceil(products.length / limit)
+
+} catch (error) { 
   
   console.error("Error deleting  product:", error.message);
        return next(new ApiError(401, error.message, "Cannot delete Product"));
