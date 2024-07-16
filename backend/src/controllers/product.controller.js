@@ -109,22 +109,18 @@ const getAdminProducts = asyncHandler(async(req,res,next)=>{
 
 
 
- const getSingleProduct = asyncHandler(async(req,res,next)=>{
-
+ const getSingleProduct = asyncHandler(async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id)
-  
-  
-  
-   if(product)return res.status(201).json(new ApiResponse(201, product, "Product  Successfully"));
-  if(!product) return next(new ApiError(401, error.message, "Cannot find Product"));
+    const product = await Product.findById(req.params.id);
 
+    if (!product) return next(new ApiError(404, "Cannot find Product"));
 
+    return res.status(201).json(new ApiResponse(201, product, "Product Found Successfully"));
   } catch (error) {
-   console.error("Error finding latest product:", error.message);
-     return next(new ApiError(401,  "Cannot find Product"));
+    console.error("Error finding product:", error.message);
+    return next(new ApiError(401, "Cannot find Product"));
   }
- })
+});
 
 
 
@@ -214,50 +210,97 @@ await Product.deleteOne()
 
 
 
- const getAllProducts = asyncHandler(async(req,res,next)=>{
-try {
+//  const getAllProducts = asyncHandler(async(req,res,next)=>{
+// try {
   
-  const {search ,sort, category,price} = req.query
-  const page = Number(process.env.PRODUCT_PER_PAGE) || 8
-  const skip = (page-1)*limit
+//   const {search ,sort, category,price} = req.query
+//   const page = Number(process.env.PRODUCT_PER_PAGE) || 8
+//   const skip = (page-1)*limit
 
 
-const  baseQuery = {
+// const  baseQuery = {}
+
+//  if(search)
+//   baseQuery.name = {
+//     $regex : search,
+//     $options :"i"
+//     }
+
+
+//     if(price)
+//       baseQuery.price  = {
+//         $lte :Number(price)
+//       }
+
+//       if(category) baseQuery.category = category
+
+
+//       const productPromise = Product.find(baseQuery).sort(
+//         sort && {price : sort === "asc"? 1 : -1})
+//         .limit(limit)
+//         .skip(skip)
  
-}
+// const [products,filteredOnlyProducts] = await Promise.all([
+//   productPromise,
+//     Product.find(baseQuery)
+// ])
+
+//   const totalPage = Math.ceil(filteredOnlyProducts.length / limit)
+
+//       // Return the response
+//       return res.status(201).json(new ApiResponse(201, products, "Product Searched Sucessfully"));
+
+// } catch (error) { 
+  
+//   console.error("Error Searching  product:", error.message);
+//        return next(new ApiError(401, error.message, "Cannot search Product"));
+// }
+
+//  })
 
 
 
+const getAllProducts = asyncHandler(async (req, res, next) => {
+  try {
+    const { search, sort, category, price } = req.query;
+    const limit = Number(process.env.PRODUCT_PER_PAGE) || 8;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * limit;
 
- if(search)
-  baseQuery.name = {
-    $regex : search,
-    $options :"i"
+    const baseQuery = {};
+
+    if (search) {
+      baseQuery.name = {
+        $regex: search,
+        $options: "i"
+      };
     }
 
+    if (price) {
+      baseQuery.price = {
+        $lte: Number(price)
+      };
+    }
 
-    if(price)
-      baseQuery.price  = {
-        $lte :Number(price)
-      }
+    if (category) baseQuery.category = category;
 
-      if(category) baseQuery.category = category
+    const productPromise = Product.find(baseQuery)
+      .sort(sort && { price: sort === "asc" ? 1 : -1 })
+      .limit(limit)
+      .skip(skip);
 
+    const [products, filteredOnlyProducts] = await Promise.all([
+      productPromise,
+      Product.find(baseQuery)
+    ]);
 
-const products = await Product.find(baseQuery).sort(
-  sort && {price : sort === "asc"? 1 : -1})
-  .limit(limit)
-  .skip(skip)
+    const totalPage = Math.ceil(filteredOnlyProducts.length / limit);
 
-  const totalPage = Math.ceil(products.length / limit)
+    return res.status(201).json(new ApiResponse(201, { products, totalPage }, "Products Searched Successfully"));
+  } catch (error) {
+    console.error("Error searching product:", error.message);
+    return next(new ApiError(401, error.message, "Cannot search Product"));
+  }
+});
 
-} catch (error) { 
-  
-  console.error("Error deleting  product:", error.message);
-       return next(new ApiError(401, error.message, "Cannot delete Product"));
-}
-
- })
-
-
-export { newProduct,getlatestProducts,getAllCategories,getAdminProducts,getSingleProduct,updateProduct,deleteProduct};
+export { newProduct,getlatestProducts,getAllCategories,getAdminProducts,getSingleProduct,updateProduct,deleteProduct,getAllProducts};
