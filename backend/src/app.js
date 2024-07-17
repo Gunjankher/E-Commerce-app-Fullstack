@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import NodeCache from 'node-cache'
 
 
 const app = express()
@@ -10,6 +11,9 @@ app.use(cors({
     origin : process.env.CORS_ORIGIN,
     credentials : true
 }))
+
+export const myCache = new NodeCache()
+
 
 app.use(express.json({limit: "16kb"}))
 app.use(express.urlencoded({extended: true ,limit : "16kb"}))

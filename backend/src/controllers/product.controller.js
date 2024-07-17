@@ -4,6 +4,7 @@ import { ApiError } from "../utilis/ApiError.js";
 import { ApiResponse } from "../utilis/ApiResponse.js";
 import {rm} from 'fs'
 import mongoose from "mongoose";
+import { myCache } from "../app.js";
 
 
 
@@ -63,13 +64,18 @@ const newProduct = asyncHandler(async (req, res, next) => {
   }
 });
 
-
+// revavidate on new update and delete product and new order 
 const getlatestProducts = asyncHandler(async(req,res,next)=>{
 
  try {
-   const products = await Product.find({}).sort({createdAt : -1}).limit(5)
- 
- 
+
+  let products;
+if(myCache.has("latest-product"))
+  products = JSON.parse(myCache.get("latest-product"))
+else{
+  products = await Product.find({}).sort({createdAt : -1}).limit(5)
+myCache.set("latest-product",JSON.stringify(products))
+}
  
    return res.status(201).json(new ApiResponse(201, products, "Product Created Successfully"));
  
@@ -83,7 +89,14 @@ const getAllCategories = asyncHandler(async(req,res,next)=>{
 
  try {
 
- const categories = await Product.distinct("category")
+  let categories;
+   if(myCache.has("categories"))
+    categories = JSON.parse(myCache.get("categories"))
+  else{
+
+    categories = await Product.distinct("category")
+    myCache.set("categories",JSON.stringify(categories))
+  }
  
  
    return res.status(201).json(new ApiResponse(201, categories, "Categories Found Successfully"));
@@ -99,7 +112,17 @@ const getAllCategories = asyncHandler(async(req,res,next)=>{
 const getAdminProducts = asyncHandler(async(req,res,next)=>{
 
   try {
-    const products = await Product.find({})
+
+    let products;
+    if(myCache.has("products"))
+     categories = JSON.parse(myCache.get("products"))
+else{
+
+  products = await Product.find({})
+  myCache.set("categories",JSON.stringify(products))
+}
+
+
     return res.status(201).json(new ApiResponse(201, products, "Admin Product Founded"));
   
   } catch (error) {
@@ -256,7 +279,7 @@ const [products,filteredOnlyProducts] = await Promise.all([
   const totalPage = Math.ceil(filteredOnlyProducts.length / limit)
 
       // Return the response
-      return res.status(201).json(new ApiResponse(201, [products,`TotalPage = ${totalPage}`],"Product Searched Sucessfullyy"));
+      return res.status(201).json(new ApiResponse(201, [products,],"Product Searched Sucessfullyy"));
 
 } catch (error) { 
   
