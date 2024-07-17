@@ -114,6 +114,7 @@ const getAdminProducts = asyncHandler(async(req,res,next)=>{
   try {
 
 
+  
     const product = await Product.findById(req.params.id);
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -221,9 +222,9 @@ await Product.deleteOne()
 try {
   
   const {search ,sort, category,price} = req.query
-  const page = Number(process.env.PRODUCT_PER_PAGE) || 8
+  const limit = Number(process.env.PRODUCT_PER_PAGE) || 8
+  const page = Number(req.query.page) || 1;
   const skip = (page-1)*limit
-
 
 const  baseQuery = {}
 
@@ -255,7 +256,7 @@ const [products,filteredOnlyProducts] = await Promise.all([
   const totalPage = Math.ceil(filteredOnlyProducts.length / limit)
 
       // Return the response
-      return res.status(201).json(new ApiResponse(201, products, "Product Searched Sucessfully"));
+      return res.status(201).json(new ApiResponse(201, [products,`TotalPage = ${totalPage}`],"Product Searched Sucessfullyy"));
 
 } catch (error) { 
   
