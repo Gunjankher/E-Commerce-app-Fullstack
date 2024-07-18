@@ -114,12 +114,12 @@ const getAdminProducts = asyncHandler(async(req,res,next)=>{
   try {
 
     let products;
-    if(myCache.has("products"))
-     categories = JSON.parse(myCache.get("products"))
+    if(myCache.has("all-products"))
+      products = JSON.parse(myCache.get("all-products"))
 else{
 
   products = await Product.find({})
-  myCache.set("categories",JSON.stringify(products))
+  myCache.set("all-products",JSON.stringify(products))
 }
 
 
@@ -135,14 +135,15 @@ else{
 
  const getSingleProduct = asyncHandler(async (req, res, next) => {
   try {
-
-
+const id = req.params.id
+let product;
+if(myCache.has(`product-${id}`))
+product = JSON.parse(myCache.get(`product-${id}`))
+  else{
+ product = await Product.findById(id);
+ myCache.set(`product-${id}`,JSON.stringify(product))
+}
   
-    const product = await Product.findById(req.params.id);
-
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return next(new ApiError(400, 'Invalid product ID format'));
-    }
 
     if (!product) return next(new ApiError(404, "Cannot find Product"));
 
