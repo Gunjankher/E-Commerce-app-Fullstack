@@ -70,11 +70,11 @@ const getlatestProducts = asyncHandler(async(req,res,next)=>{
  try {
 
   let products;
-if(myCache.has("latest-product"))
-  products = JSON.parse(myCache.get("latest-product"))
+if(myCache.has("latest-products"))
+  products = JSON.parse(myCache.get("latest-products"))
 else{
   products = await Product.find({}).sort({createdAt : -1}).limit(5)
-myCache.set("latest-product",JSON.stringify(products))
+myCache.set("latest-products",JSON.stringify(products))
 }
  
    return res.status(201).json(new ApiResponse(201, products, "Product Created Successfully"));
