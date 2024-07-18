@@ -5,6 +5,7 @@ import { ApiResponse } from "../utilis/ApiResponse.js";
 import {rm} from 'fs'
 import mongoose from "mongoose";
 import { myCache } from "../app.js";
+import { invalidateCache } from "../utilis/invalidateCache.js";
 
 
 
@@ -51,6 +52,8 @@ const newProduct = asyncHandler(async (req, res, next) => {
       photos: [photoObj],
       description
     });
+
+    await invalidateCache({product:true})
 
     // Log the created product
     console.log("Product created:", product);
@@ -198,6 +201,7 @@ if(category)findProducts.category = category
 
 await findProducts.save()
 
+await invalidateCache({product:true})
 
     // Return the response
     return res.status(201).json(new ApiResponse(201, findProducts, "Product Updated Successfully"));
@@ -230,6 +234,7 @@ const deleteProduct = asyncHandler(async(req,res,next)=>{
 await Product.deleteOne()
 
 
+await invalidateCache({product:true})
     return res.status(201).json(new ApiResponse(201, "Product deleted Successfully"));
   
       
