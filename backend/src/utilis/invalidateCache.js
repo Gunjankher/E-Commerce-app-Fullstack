@@ -1,4 +1,5 @@
 import { myCache } from "../app.js"
+import { Order } from "../models/order.model.js"
 import { Product } from "../models/products.model.js"
 
 export const invalidateCache = async({
