@@ -24,3 +24,9 @@ myCache.del(productKeys)
     }
 }
 
+
+// To reduce Stock after order
+
+export const  reduceStock = (orderItems)=>{
+    
+}
