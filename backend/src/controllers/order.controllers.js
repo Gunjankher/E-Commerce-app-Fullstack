@@ -55,7 +55,7 @@ try {
 
 
 
-const myOrder = asyncHandler(async(req,res,next)=>{
+const myOrders = asyncHandler(async(req,res,next)=>{
 
   try {
     
@@ -64,7 +64,7 @@ const myOrder = asyncHandler(async(req,res,next)=>{
        
   let orders;
 
-  if(myCache.has(key)) orders = JSON.parse(myCache.get(""))
+  if(myCache.has(key)) orders = JSON.parse(myCache.get(key))
 
     else{
       orders = await Order.find({user})
@@ -78,26 +78,26 @@ const myOrder = asyncHandler(async(req,res,next)=>{
   }
   
   })
-const allOrder = asyncHandler(async(req,res,next)=>{
+
+const allOrders = asyncHandler(async(req,res,next)=>{
 
   try {
-    
-    const {id :user} = req.query
-    const key = `my-orders-${user}`
+ 
+    const key = `all-orders`
        
   let orders;
 
-  if(myCache.has(key)) orders = JSON.parse(myCache.get(""))
+  if(myCache.has(key)) orders = JSON.parse(myCache.get(key))
 
     else{
-      orders = await Order.find({user})
+      orders = await Order.find()
       myCache.set(key,JSON.stringify(orders))
     }
   
-     return res.status(201).json(new ApiResponse(201, orders, "gets my order Sucessfully "));
+     return res.status(201).json(new ApiResponse(201, orders, "gets all order Sucessfully "));
   } catch (error) {
-    console.error("Error getting myorder:", error.message);
-    return next(new ApiError(401, error.message, "Cannot get Order"));
+    console.error("Error getting all order:", error.message);
+    return next(new ApiError(401, error.message, "Cannot get  all Order"));
   }
   
   })
@@ -105,6 +105,6 @@ const allOrder = asyncHandler(async(req,res,next)=>{
 
 export {
     newOrder,
-    myOrder,
-    allOrder
+    myOrders,
+    allOrders,
 }
