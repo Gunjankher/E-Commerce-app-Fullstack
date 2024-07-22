@@ -1,5 +1,4 @@
 import { myCache } from "../app.js"
-import { Order } from "../models/order.model.js"
 import { Product } from "../models/products.model.js"
 import { ApiError } from "./ApiError.js"
 
@@ -30,14 +29,23 @@ myCache.del(productKeys)
 
 // To reduce Stock after order
 
-export const  reduceStock = async(orderItems)=>{
-    
-for (let i = 0; index < orderItems.length; i++) {
-   const order = orderItems[i]
-    const product = await Product.findById(order.productId)
-    if(!product)new ApiError(401, `Product Not Found`)
-        product.stock -= order.quantity
-    await product.save()
-}
 
-}
+
+export const reduceStock = async (orderItems) => {
+  for (const order of orderItems) {
+      try {
+          const product = await Product.findById(order.productId);
+          if (!product) {
+              const errorMessage = `Product with ID ${order.productId} not found`;
+              console.error(errorMessage);
+              throw new Error(errorMessage);
+          }
+
+          product.stock -= order.quantity;
+          await product.save();
+      } catch (error) {
+          console.error(`Error processing order item with product ID ${order.productId}: ${error.message}`);
+          throw error;  // Re-throw the error after logging it
+      }
+  }
+};
