@@ -1,4 +1,5 @@
 import { myCache } from "../app.js"
+import { Order } from "../models/order.model.js"
 import { Product } from "../models/products.model.js"
 import { ApiError } from "./ApiError.js"
 
@@ -6,7 +7,8 @@ import { ApiError } from "./ApiError.js"
 export const invalidateCache = async({
     product,
     order,
-    admin
+    admin,
+    userId
 })=>{
     if(product){
 
@@ -22,6 +24,22 @@ products.forEach((i)=>{
 })
 
 myCache.del(productKeys)
+
+    }
+
+
+    if(order){
+      const orderKeys = [
+        "all-orders"
+    ]
+    const orders = await Order.find({}).select("_id")
+
+    orders.forEach((i)=>{
+        orderKeys.push(`orders-${i._id}`,`my-orders-${userId}`
+       )
+    })
+    
+    myCache.del(orderKeys)
 
     }
 }

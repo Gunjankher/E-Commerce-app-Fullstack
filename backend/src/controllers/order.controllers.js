@@ -42,7 +42,7 @@ try {
         if(!order) return new ApiError(400,`cannot create Order`)
           console.log(user);
    await reduceStock(orderItems)
-   await invalidateCache({product:true,order : true , admin:true})
+   await invalidateCache({product:true,order : true , admin:true,userId:user})
 
    return res.status(201).json(new ApiResponse(201, order, "Order Created Successfully"));
 } catch (error) {
@@ -131,9 +131,71 @@ const getSingleOrder = asyncHandler(async(req,res,next)=>{
   }) 
 
 
+
+  const processOrder = asyncHandler(async(req,res,next)=>{
+
+    try {
+      const {id} = req.params
+
+const order = await Order.findById(id)
+
+if(!order) return new ApiError(404, `order not Found`)
+
+switch (order.status) {
+  case "Processing":
+    order.status = "Shipped"    
+    break;
+  case "Shipped":
+    order.status = "Delivered"    
+    break;
+  default:
+    order.status = "Delivered"
+    break;
+}
+
+await order.save()
+
+        
+       await invalidateCache({product:false,order : true , admin:true,userId: order.user})
+    
+       return res.status(201).json(new ApiResponse(201, order, "Order processed Successfully"));
+    } catch (error) {
+      console.error("Error processing order:", error.message);
+      return next(new ApiError(401, error.message, "Cannot process Order"));
+    }
+    
+    })
+    
+
+    const deleteOrder = asyncHandler(async(req,res,next)=>{
+
+      try {
+        const {id} = req.params
+  
+  const order = await Order.findById(id)
+  
+  if(!order) return new ApiError(404, `order not Found`)
+  
+await Order.deleteOne()
+  
+          
+         await invalidateCache({product:false,order : true , admin:true,userId : order.user})
+      
+         return res.status(201).json(new ApiResponse(201, "Order Deleted Successfully"));
+      } catch (error) {
+        console.error("Error Deleting:", error.message);
+        return next(new ApiError(401, error.message, "Cannot Delete order"));
+      }
+      
+      })
+      
+  
+
 export {
     newOrder,
     myOrders,
     allOrders,
     getSingleOrder,
+    processOrder,
+    deleteOrder,
 }
