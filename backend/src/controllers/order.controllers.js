@@ -40,7 +40,7 @@ try {
 
 
         if(!order) return new ApiError(400,`cannot create Order`)
-
+          console.log(user);
    await reduceStock(orderItems)
    await invalidateCache({product:true,order : true , admin:true})
 
@@ -82,29 +82,58 @@ const myOrders = asyncHandler(async(req,res,next)=>{
 const allOrders = asyncHandler(async(req,res,next)=>{
 
   try {
- 
+    const {id} = req.params
     const key = `all-orders`
        
-  let orders;
+  let orders = []
 
   if(myCache.has(key)) orders = JSON.parse(myCache.get(key))
 
     else{
-      orders = await Order.find().populate("user","name")
+      orders = await Order.find().populate('user','name')
       myCache.set(key,JSON.stringify(orders))
     }
   
+   
      return res.status(201).json(new ApiResponse(201, orders, "gets all order Sucessfully "));
   } catch (error) {
     console.error("Error getting all order:", error.message);
     return next(new ApiError(401, error.message, "Cannot get  all Order"));
   }
   
-  })
+  }) 
+
+const getSingleOrder = asyncHandler(async(req,res,next)=>{
+
+  
+  try {
+    
+    const {id} = req.params
+    const key = `orders-${id}`
+       
+  let orders = []
+
+  if(myCache.has(key)) orders = JSON.parse(myCache.get(key))
+
+    else{
+      orders = await Order.findById(id).populate('user','name')
+      if(!orders)return new ApiError(400,`order not Found`)
+      myCache.set(key,JSON.stringify(orders))
+    }
+  
+   
+     return res.status(201).json(new ApiResponse(201, orders, "gets single-order Sucessfully "));
+  } catch (error) {
+    console.error("Error getting single order:", error.message);
+    return next(new ApiError(401, error.message, "Cannot get  Single Order"));
+  }
+  
+  }) 
 
 
 export {
     newOrder,
     myOrders,
     allOrders,
+    getSingleOrder,
 }

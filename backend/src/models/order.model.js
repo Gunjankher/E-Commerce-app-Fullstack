@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { User } from "./user.model.js";
 
 const schema = new mongoose.Schema(
   {
@@ -64,7 +65,7 @@ const schema = new mongoose.Schema(
         price: Number,
         quantity: Number,
         productId: {
-          type: mongoose.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           ref: "Product",
         },
       },
