@@ -54,9 +54,23 @@ try {
 
 
 
+const myOrder = asyncHandler(async(req,res,next)=>{
 
+  try {
+    
+       
+  
+  
+     return res.status(201).json(new ApiResponse(201, {}, "gets my order Sucessfully "));
+  } catch (error) {
+    console.error("Error getting myorder:", error.message);
+    return next(new ApiError(401, error.message, "Cannot get Order"));
+  }
+  
+  })
 
 
 export {
-    newOrder
+    newOrder,
+    myOrder
 }
