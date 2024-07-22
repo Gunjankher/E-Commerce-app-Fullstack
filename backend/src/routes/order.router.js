@@ -12,7 +12,7 @@ const router = Router()
 
 router.route("/new").post(newOrder)
 router.route("/my").get(myOrders)
-router.route ("all").get(adminOnly,allOrders)
+router.route ("/all").get(allOrders)
 
 
 // 2.33  76% 2.44 70
