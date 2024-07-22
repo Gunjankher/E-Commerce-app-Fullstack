@@ -1,3 +1,4 @@
+import { myCache } from "../app.js";
 import { Order } from "../models/order.model.js";
 import { Product } from "../models/products.model.js";
 import { ApiError } from "../utilis/ApiError.js";
@@ -58,10 +59,42 @@ const myOrder = asyncHandler(async(req,res,next)=>{
 
   try {
     
+    const {id :user} = req.query
+    const key = `my-orders-${user}`
        
+  let orders;
+
+  if(myCache.has(key)) orders = JSON.parse(myCache.get(""))
+
+    else{
+      orders = await Order.find({user})
+      myCache.set(key,JSON.stringify(orders))
+    }
   
+     return res.status(201).json(new ApiResponse(201, orders, "gets my order Sucessfully "));
+  } catch (error) {
+    console.error("Error getting myorder:", error.message);
+    return next(new ApiError(401, error.message, "Cannot get Order"));
+  }
   
-     return res.status(201).json(new ApiResponse(201, {}, "gets my order Sucessfully "));
+  })
+const allOrder = asyncHandler(async(req,res,next)=>{
+
+  try {
+    
+    const {id :user} = req.query
+    const key = `my-orders-${user}`
+       
+  let orders;
+
+  if(myCache.has(key)) orders = JSON.parse(myCache.get(""))
+
+    else{
+      orders = await Order.find({user})
+      myCache.set(key,JSON.stringify(orders))
+    }
+  
+     return res.status(201).json(new ApiResponse(201, orders, "gets my order Sucessfully "));
   } catch (error) {
     console.error("Error getting myorder:", error.message);
     return next(new ApiError(401, error.message, "Cannot get Order"));
@@ -72,5 +105,6 @@ const myOrder = asyncHandler(async(req,res,next)=>{
 
 export {
     newOrder,
-    myOrder
+    myOrder,
+    allOrder
 }
