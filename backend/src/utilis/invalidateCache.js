@@ -8,7 +8,9 @@ export const invalidateCache = async({
     product,
     order,
     admin,
-    userId
+    userId,
+    orderId,
+    productId
 })=>{
     if(product){
 
@@ -17,11 +19,15 @@ export const invalidateCache = async({
             "categories",
             "all-products"
         ]
-        const products = await Product.find({}).select("_id")
+//         const products = await Product.find({}).select("_id")
 
-products.forEach((i)=>{
-    productKeys.push(`product-${i._id}`)
-})
+// products.forEach((i)=>{
+//     productKeys.push(`product-${i._id}`)
+// })
+
+
+
+if(typeof productId === "string")productKeys.push(`product-${productId}`)
 
 myCache.del(productKeys)
 
@@ -30,15 +36,19 @@ myCache.del(productKeys)
 
     if(order){
       const orderKeys = [
-        "all-orders"
+        "all-orders",
+        `my-orders-${userId}`,
+        `order-${orderId}`
     ]
-    const orders = await Order.find({}).select("_id")
+    // const orders = await Order.find({}).select("_id")
 
-    orders.forEach((i)=>{
-        orderKeys.push(`orders-${i._id}`,`my-orders-${userId}`
-       )
-    })
+    // orders.forEach((i)=>{
+    //     orderKeys.push(`orders-${i._id}`,`my-orders-${userId}`
+    //    )
+    // })
     
+
+
     myCache.del(orderKeys)
 
     }

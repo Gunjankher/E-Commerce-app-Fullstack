@@ -42,7 +42,9 @@ try {
         if(!order) return new ApiError(400,`cannot create Order`)
           console.log(user);
    await reduceStock(orderItems)
-   await invalidateCache({product:true,order : true , admin:true,userId:user})
+   await invalidateCache({product:true,order : true , admin:true,userId:user,
+    productId : order.orderItems.map((i)=> String(i.productId))
+   })
 
    return res.status(201).json(new ApiResponse(201, order, "Order Created Successfully"));
 } catch (error) {
@@ -155,8 +157,7 @@ switch (order.status) {
 
 await order.save()
 
-        
-       await invalidateCache({product:false,order : true , admin:true,userId: order.user})
+await invalidateCache({product:false,order : true , admin:true,userId : order.user,orderId :order._id})
     
        return res.status(201).json(new ApiResponse(201, order, "Order processed Successfully"));
     } catch (error) {
@@ -181,7 +182,7 @@ await order.save()
  if (deleteOrder) return new ApiError(400,`Order is Stil not Deleted`)
   
           
-         await invalidateCache({product:false,order : true , admin:true,userId : order.user})
+         await invalidateCache({product:false,order : true , admin:true,userId : order.user,orderId :order._id})
 
       if(!order) new ApiError(200 , `order Delete ho gaya hai `)
          return res.status(201).json(new ApiResponse(201, "Order Deleted Successfully"));
