@@ -176,11 +176,14 @@ await order.save()
   
   if(!order) return new ApiError(404, `order not Found`)
   
-await Order.deleteOne()
+ const deletedOrder = await order.deleteOne()
+
+ if (deleteOrder) return new ApiError(400,`Order is Stil not Deleted`)
   
           
          await invalidateCache({product:false,order : true , admin:true,userId : order.user})
-      
+
+      if(!order) new ApiError(200 , `order Delete ho gaya hai `)
          return res.status(201).json(new ApiResponse(201, "Order Deleted Successfully"));
       } catch (error) {
         console.error("Error Deleting:", error.message);
