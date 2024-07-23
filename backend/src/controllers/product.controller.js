@@ -201,7 +201,7 @@ if(category)findProducts.category = category
 
 await findProducts.save()
 
-await invalidateCache({product:true})
+await invalidateCache({product:true,productId:String(product._id)})
 
     // Return the response
     return res.status(201).json(new ApiResponse(201, findProducts, "Product Updated Successfully"));
@@ -233,8 +233,7 @@ const deleteProduct = asyncHandler(async(req,res,next)=>{
       }
 await Product.deleteOne()
 
-
-await invalidateCache({product:true})
+await invalidateCache({product:true,productId:String(product._id)})
     return res.status(201).json(new ApiResponse(201, "Product deleted Successfully"));
   
       
