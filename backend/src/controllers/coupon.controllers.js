@@ -37,13 +37,28 @@ const applyDiscount = asyncHandler(async (req, res, next) => {
 
         if(!discount) return next(new ApiError(401, `invalid Coupon Code`))
   
-      return res.status(200).json(new ApiResponse(200,  `Coupon ${coupon} Created sucessfully`));
+      return res.status(200).json(new ApiResponse(200,{discount:discount.amount}, `Discount Amount is Given`));
     } catch (error) {
-      console.error('Error creating Coupon :', error.message);
-      return next(new ApiError(401, error.message, 'Cannot create Coupon'));
+      console.error('Error giving Discount :', error.message);
+      return next(new ApiError(401, error.message, 'Cannot process discount Coupon'));
     }
   });
    
+
+  export const allCoupons = asyncHandler(async (req, res, next) => {
+
+    try {
+      
+      const coupons = await Coupon.find({});
+
+    return res.status(200).json(new ApiResponse(200, coupons `all Coupons Founded`));
+  } catch (error) {
+    console.error('Error Finding All Coupons :', error.message);
+    return next(new ApiError(401, error.message, 'Cannot find all Coupon'));
+  }
+   
+  });
+  
 
 
   export {
