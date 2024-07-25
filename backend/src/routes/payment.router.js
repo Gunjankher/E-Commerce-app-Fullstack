@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { adminOnly } from "../middlerware/auth.middleware.js";
-import { applyDiscount, newCoupon } from "../controllers/coupon.controllers.js";
+import { allCoupons, applyDiscount, deleteCoupon, getCoupon, newCoupon, updateCoupon } from "../controllers/coupon.controllers.js";
 
 
 
@@ -10,9 +10,11 @@ import { applyDiscount, newCoupon } from "../controllers/coupon.controllers.js";
 
 const router = Router()
 
-router.route("/coupon/new").post(newCoupon)
+router.route("/coupon/new").post(adminOnly,newCoupon)
 router.route("/discount").get(applyDiscount)
-router.route("/all").get(applyDiscount)
+router.route("/coupon/all").get(adminOnly,allCoupons)
+router.route("/coupon/all").get(adminOnly,allCoupons)
+router.route("/coupon/:id").get(adminOnly,getCoupon).put(adminOnly,updateCoupon).delete(adminOnly,deleteCoupon)
 
 
 

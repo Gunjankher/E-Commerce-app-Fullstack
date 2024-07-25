@@ -45,23 +45,85 @@ const applyDiscount = asyncHandler(async (req, res, next) => {
   });
    
 
-  export const allCoupons = asyncHandler(async (req, res, next) => {
+   const allCoupons = asyncHandler(async (req, res, next) => {
 
     try {
       
       const coupons = await Coupon.find({});
 
-    return res.status(200).json(new ApiResponse(200, coupons `all Coupons Founded`));
+    return res.status(200).json(new ApiResponse(200, coupons, `all Coupons Founded`));
   } catch (error) {
     console.error('Error Finding All Coupons :', error.message);
     return next(new ApiError(401, error.message, 'Cannot find all Coupon'));
   }
    
   });
+
+   const deleteCoupon = asyncHandler(async (req, res, next) => {
+
+    try {
+      
+const {id} = req.params
+
+
+       await Coupon.findByIdAndDelete(id);
+
+    return res.status(200).json(new ApiResponse(200, `all Coupons deleted`));
+  } catch (error) {
+    console.error('Error deleteing Coupon :', error.message);
+    return next(new ApiError(401, error.message, 'Cannot delete Coupon'));
+  }
+   
+  });
   
+
+
+
+
+  const getCoupon = asyncHandler(async (req, res, next) => {
+
+    try {
+      const {id} = req.params
+      const coupons = await Coupon.findById(id)
+
+    return res.status(200).json(new ApiResponse(200, coupons, ` Coupon Founded`));
+  } catch (error) {
+    console.error('Error Finding  Coupon :', error.message);
+    return next(new ApiError(401, error.message, 'Cannot find  Coupon'));
+  }
+   
+  });
+
+
+
+  const updateCoupon = asyncHandler(async (req, res, next) => {
+
+    try {
+      const {id} = req.params
+      const {code, amount} = req.body
+      const coupons = await Coupon.findById(id)
+
+      if(!coupons) next(new ApiError(401, `can not find ID`))
+
+if(code) coupons.code = code
+if(amount) coupons.amount = amount
+
+await coupons.save()
+
+    return res.status(200).json(new ApiResponse(200, coupons, ` Coupon Founded`));
+  } catch (error) {
+    console.error('Error Finding  Coupon :', error.message);
+    return next(new ApiError(401, error.message, 'Cannot find  Coupon'));
+  }
+   
+  });
 
 
   export {
 newCoupon,
 applyDiscount,
+allCoupons,
+deleteCoupon,
+getCoupon,
+updateCoupon,
   }
