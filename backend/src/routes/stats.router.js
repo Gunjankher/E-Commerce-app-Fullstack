@@ -9,7 +9,7 @@ import { allOrders, deleteOrder, getSingleOrder, myOrders, newOrder, processOrde
 
 const router = Router()
 
-router.route("/new").post(newOrder)
+router.route("/new").get(newOrder)
 
 
 
