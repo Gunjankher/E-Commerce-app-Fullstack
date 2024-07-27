@@ -57,7 +57,13 @@ const getBarCharts = asyncHandler(async (req, res, next) => {
 const getLineCharts = asyncHandler(async (req, res, next) => {
     try {
      
-  
+  const today = new Date()
+  const startofThisMonth = new Date(today.getFullYear(),today.getMonth(),1)
+  const startofLastMonth = new Date(today.getFullYear(),today.getMonth(),-1)
+
+
+
+
       return res.status(200).json(new ApiResponse(200, 'Order deleted successfully'));
     } catch (error) {
       console.error('Error deleting order:', error.message);
