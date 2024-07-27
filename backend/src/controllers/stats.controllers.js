@@ -5,6 +5,7 @@ import { ApiResponse } from "../utilis/ApiResponse.js";
 import { Product } from "../models/products.model.js";
 import { User } from "../models/user.model.js";
 import { Order } from "../models/order.model.js";
+import { calculatePercentage } from "../utilis/invalidateCache.js";
 
 
 
@@ -78,23 +79,43 @@ else{
     },
   });
 
-const [thisMonthProducts,thisMonthUsers,thisMonthOrderslastMonthProducts,lastMonthOrders,lastMonthUsers,] = await Promise.all([
+const [thisMonthProducts,thisMonthUsers,thisMonthOrders,lastMonthProducts,lastMonthOrders,lastMonthUsers,] = await Promise.all([
 thisMonthProductsPromise,
-thisMonthProductsPromise,
+thisMonthUsersPromise,
 thisMonthOrdersPromise,
 lastMonthProductsPromise,
 lastMonthOrdersPromise,
 lastMonthUsersPromise,
 
-
-
 ])
+const productChangePercent = calculatePercentage(
+thisMonthProducts.length,
+lastMonthProducts.length
+)
 
 
+
+const userChangePercent = calculatePercentage(
+  thisMonthUsers.length,
+  lastMonthUsers.length
+)
+const orderChangePercent = calculatePercentage(
+  thisMonthOrders.length,
+  lastMonthOrders.length
+)
+
+
+
+stats ={
+  productChangePercent,
+  userChangePercent,
+  orderChangePercent
 }
 
 
 
+
+}
 
       return res.status(200).json(new ApiResponse(200, stats,'DashBoard Data got successfully'));
     } catch (error) {
