@@ -3,6 +3,8 @@ import {myCache} from '../app.js'
 import { ApiError } from "../utilis/ApiError.js";
 import { ApiResponse } from "../utilis/ApiResponse.js";
 import { Product } from "../models/products.model.js";
+import { User } from "../models/user.model.js";
+import { Order } from "../models/order.model.js";
 
 
 
@@ -76,7 +78,17 @@ else{
     },
   });
 
+const [thisMonthProducts,thisMonthUsers,thisMonthOrderslastMonthProducts,lastMonthOrders,lastMonthUsers,] = await Promise.all([
+thisMonthProductsPromise,
+thisMonthProductsPromise,
+thisMonthOrdersPromise,
+lastMonthProductsPromise,
+lastMonthOrdersPromise,
+lastMonthUsersPromise,
 
+
+
+])
 
 
 }
