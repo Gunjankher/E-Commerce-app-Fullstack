@@ -88,28 +88,35 @@ lastMonthOrdersPromise,
 lastMonthUsersPromise,
 
 ])
-const productChangePercent = calculatePercentage(
-thisMonthProducts.length,
-lastMonthProducts.length
-)
 
+const ChangePercent = {
 
+revenue :calculatePercentage(4454,4545),
 
-const userChangePercent = calculatePercentage(
+user :calculatePercentage(
   thisMonthUsers.length,
   lastMonthUsers.length
-)
-const orderChangePercent = calculatePercentage(
+),
+
+order : calculatePercentage(
   thisMonthOrders.length,
   lastMonthOrders.length
-)
+),
+
+product :calculatePercentage(
+  thisMonthProducts.length,
+  lastMonthProducts.length
+  )
+
+
+}
+
+
 
 
 
 stats ={
-  productChangePercent,
-  userChangePercent,
-  orderChangePercent
+ ChangePercent
 }
 
 
