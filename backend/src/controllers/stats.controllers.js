@@ -22,6 +22,9 @@ if(myCache.has("admin-stats"))
 else{
 
   const today = new Date()
+  const sixMonthAgo = new Date()
+sixMonthAgo.setMonth(sixMonthAgo.getMonth()-6)
+
 
   const thisMonth = {
     start: new Date(today.getFullYear(), today.getMonth(), 1),
@@ -79,19 +82,52 @@ else{
     },
   });
 
-const [thisMonthProducts,thisMonthUsers,thisMonthOrders,lastMonthProducts,lastMonthOrders,lastMonthUsers,] = await Promise.all([
+
+
+  const lastSixMOnthOrdersPromise = Order.find({
+    createdAt: {
+      $gte: sixMonthAgo,
+      $lte: today,
+    },
+  });
+
+ 
+
+
+
+
+
+
+const [thisMonthProducts,thisMonthUsers,thisMonthOrders,lastMonthProducts,lastMonthOrders,lastMonthUsers,productCount,usersCount,allOrders,lastSixMOnthOrders,categories] = await Promise.all([
 thisMonthProductsPromise,
 thisMonthUsersPromise,
 thisMonthOrdersPromise,
 lastMonthProductsPromise,
 lastMonthOrdersPromise,
 lastMonthUsersPromise,
-
+Product.countDocuments(),
+User.countDocuments(),
+Order.find({}).select("total"),
+lastSixMOnthOrdersPromise,
+Product.distinct("category")
 ])
+
+const thisMonthRevenue = thisMonthOrders.reduce(
+  (total, order) => total + (order.total || 0),
+  0
+);
+
+const lastMonthRevenue = lastMonthOrders.reduce(
+  (total, order) => total + (order.total || 0),
+  0
+);
+
+
+
 
 const ChangePercent = {
 
-revenue :calculatePercentage(4454,4545),
+revenue :calculatePercentage(thisMonthRevenue,lastMonthRevenue),
 
 user :calculatePercentage(
   thisMonthUsers.length,
@@ -112,11 +148,45 @@ product :calculatePercentage(
 }
 
 
+const revenue =allOrders.reduce(
+  (total, order) => total + (order.total || 0),
+  0
+);
+
+
+const count = {
+  revenue,
+  user : usersCount,
+  product : productCount,
+  order : allOrders.length
+}
+
+
+
+const orderMonthCounts = new Array(6).fill(0);
+const orderMonthyRevenue = new Array(6).fill(0);
+
+lastSixMOnthOrders.forEach((order)=>{
+  const creationDate = order.createdAt;
+  const monthDiff = today.getMonth()-creationDate.getMonth()
+
+if(monthDiff <6){
+orderMonthCounts[6-monthDiff-1] +=1
+orderMonthyRevenue[6-monthDiff-1] +=order.total
+}
+
+})
+
 
 
 
 stats ={
- ChangePercent
+ ChangePercent,
+ count,
+ chart :{
+  order :orderMonthCounts,
+  revenue :orderMonthyRevenue,
+ }
 }
 
 
