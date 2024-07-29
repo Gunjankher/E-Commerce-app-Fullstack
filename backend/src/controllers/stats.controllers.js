@@ -181,9 +181,15 @@ const categoriesCountPromise = categories.map((category)=>Product.countDocuments
 
 const categoriesCount = await Promise.all(categoriesCountPromise)
 
-const categoryCount = [
-  
-]
+const categoryCount = []
+
+
+categories.forEach((category,i)=>{
+  categoryCount.push({
+    [category]: categoriesCount[i]
+  })
+})
+
 
 
 stats ={
