@@ -177,10 +177,18 @@ orderMonthyRevenue[6-monthDiff-1] +=order.total
 
 })
 
+const categoriesCountPromise = categories.map((category)=>Product.countDocuments({category}))
 
+const categoriesCount = await Promise.all(categoriesCountPromise)
+
+const categoryCount = [
+  
+]
 
 
 stats ={
+  categories,
+  categoriesCount,
  ChangePercent,
  count,
  chart :{
