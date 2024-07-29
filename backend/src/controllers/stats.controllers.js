@@ -5,7 +5,8 @@ import { ApiResponse } from "../utilis/ApiResponse.js";
 import { Product } from "../models/products.model.js";
 import { User } from "../models/user.model.js";
 import { Order } from "../models/order.model.js";
-import { calculatePercentage, getInventories } from "../utilis/invalidateCache.js";
+import { calculatePercentage, getChartData, getInventories } from "../utilis/invalidateCache.js";
+
 
 
 
