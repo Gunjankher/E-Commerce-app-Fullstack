@@ -3,6 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import NodeCache from 'node-cache'
 import morgan from 'morgan'
+import stripe from 'stripe'
 
 
 const app = express()
@@ -12,6 +13,12 @@ app.use(cors({
     origin : process.env.CORS_ORIGIN,
     credentials : true
 }))
+
+
+const stripeKey = process.env.STRIPE_KEY || ""
+
+
+export const newStripe = new stripe(stripeKey)
 
 export const myCache = new NodeCache()
 

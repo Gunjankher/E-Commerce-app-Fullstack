@@ -2,8 +2,30 @@ import { asyncHandler } from "../utilis/asyncHandler.js";
 import {Coupon} from '../models/coupon.model.js'
 import { ApiError } from "../utilis/ApiError.js";
 import { ApiResponse } from "../utilis/ApiResponse.js";
+import { newStripe } from "../app.js";
 
 
+
+
+const createPaymentIntent = asyncHandler(async (req, res, next) => {
+  try {
+    const { amount } = req.body;
+
+    if (!amount) {
+      return next(new ApiError(400, "Please enter amount"));
+    }
+
+    const paymentIntent = await newStripe.paymentIntents.create({
+      amount: Number(amount) * 100,
+      currency: "inr",
+    });
+
+    return res.status(201).json(new ApiResponse(201, { clientSecret: paymentIntent.client_secret }, "Payment Intent created successfully"));
+  } catch (error) {
+    console.error("Error creating payment intent:", error.message);
+    return next(new ApiError(500, error.message, "Cannot create payment intent"));
+  }
+});
 
 
 const newCoupon = asyncHandler(async (req, res, next) => {
@@ -126,4 +148,5 @@ allCoupons,
 deleteCoupon,
 getCoupon,
 updateCoupon,
+createPaymentIntent,
   }
