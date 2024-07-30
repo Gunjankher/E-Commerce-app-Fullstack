@@ -53,6 +53,14 @@ myCache.del(productKeys)
     myCache.del(orderKeys)
 
     }
+
+if(admin){
+  myCache.del([ "admin-stats",
+    "admin-pie-charts",
+    "admin-bar-charts",
+    "admin-line-charts",])
+}
+
 }
 
 
