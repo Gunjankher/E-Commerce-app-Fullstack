@@ -53,7 +53,7 @@ const newProduct = asyncHandler(async (req, res, next) => {
       description
     });
 
-    await invalidateCache({product:true})
+    await invalidateCache({product:true,admin:true})
 
     // Log the created product
     console.log("Product created:", product);
@@ -201,7 +201,9 @@ if(category)findProducts.category = category
 
 await findProducts.save()
 
-await invalidateCache({product:true,productId:String(product._id)})
+
+
+await invalidateCache({product:true,productId:String(product._id),admin:true})
 
     // Return the response
     return res.status(201).json(new ApiResponse(201, findProducts, "Product Updated Successfully"));
@@ -233,7 +235,7 @@ const deleteProduct = asyncHandler(async(req,res,next)=>{
       }
 await Product.deleteOne()
 
-await invalidateCache({product:true,productId:String(product._id)})
+await invalidateCache({product:true,productId:String(product._id),admin:true})
     return res.status(201).json(new ApiResponse(201, "Product deleted Successfully"));
   
       
