@@ -6,6 +6,8 @@ import {createBrowserRouter,createRoutesFromElements,Routes,RouterProvider,Route
 import { Suspense, lazy } from 'react'
 import Loader from './components/Loader.jsx'
 import {Toaster} from 'react-hot-toast'
+import { store } from './redux/store.js'
+import {Provider} from 'react-redux'
 
 
 // ADMIN ROUTES
@@ -209,6 +211,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <Provider store={store}>
     <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 )
