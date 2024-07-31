@@ -9,15 +9,18 @@ const [date,setDate] = useState("")
 
 
 const 
-loginHandler =()=>{
-
+loginHandler =async()=>{
+try {
+  
+} catch (error) {
+  console.error(1`signin failed` , error)
+}
 }
 
   return (
     <div className="login">
     <main>
       <h1 className="heading">Login</h1>
-
       <div>
         <label>Gender</label>
         <select value={gender} onChange={(e) => setGender(e.target.value)}>

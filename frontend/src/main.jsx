@@ -5,6 +5,7 @@ import './styles/app.scss'
 import {createBrowserRouter,createRoutesFromElements,Routes,RouterProvider,Route,BrowserRouter} from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import Loader from './components/Loader.jsx'
+import {Toaster} from 'react-hot-toast'
 
 
 // ADMIN ROUTES
@@ -197,7 +198,7 @@ const router = createBrowserRouter(
           <Toss/>
         </Suspense>
       } />
-      
+      <Toaster />
       </Route>
     </>
   )
