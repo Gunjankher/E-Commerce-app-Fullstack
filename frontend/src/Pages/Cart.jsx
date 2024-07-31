@@ -64,11 +64,11 @@ return ()=>{
         <p>Tax : ₹{tax}</p>
         <p>
           Discount : <em> - ₹{Discount} </em>
-          <p>
+        
             <b>
               Total : {total}
             </b>
-          </p>
+          
         </p>
 
         <input
