@@ -198,8 +198,8 @@ const router = createBrowserRouter(
           <Toss/>
         </Suspense>
       } />
-      <Toaster />
       </Route>
+     
     </>
   )
 )

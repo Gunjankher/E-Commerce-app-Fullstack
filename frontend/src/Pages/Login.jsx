@@ -1,4 +1,6 @@
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import {FcGoogle} from 'react-icons/fc'
 
 function Login() {
@@ -11,9 +13,13 @@ const [date,setDate] = useState("")
 const 
 loginHandler =async()=>{
 try {
-  
+
+const provider  = new GoogleAuthProvider()
+const {user} = await signInWithPopup(auth,provider)
+
+  console.log(user);
 } catch (error) {
-  console.error(1`signin failed` , error)
+toast.error('Sign in Failed')
 }
 }
 
