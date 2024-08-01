@@ -15,37 +15,42 @@ const [login] = useLoginMutation()
 
 
 
+const loginHandler = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const { user } = await signInWithPopup(auth, provider);
 
+    const res = await login({
+      name: "gk",
+      email: "sdaf",
+      gender,
+      role: "user",
+      dob: date,
+      _id: "gkkk"
+    });
 
-const loginHandler = async()=>{
-try {
-const provider  = new GoogleAuthProvider()
-const {user} = await signInWithPopup(auth,provider)
- 
- const res = await login({
-  name :"gk",
-  email:"sdaf",
-  gender,
-  role :"user",
-  dob:date,
-  _id :"gkkk"
-})
+    if (res && res.data) {
+      toast.success(res.data.message);
+    } else if (res && res.error) {
+      const error = res.error;
+      const message = error.data || { message: 'Unknown error occurred' };
+      toast.error(message.message);
+    } else {
+      toast.error('Unknown error occurred');
+    }
 
-if("data" in res){
-toast.success(res.data.message)
-}else{
-  const error  = res.error 
-  const message = error.data
-  toast.error(message.message)
-}
+    console.log(user);
+  } catch (error) {
+    toast.error('Sign in Failed');
+    console.error('Something went wrong with sign in', error);
 
+    // Log detailed error response
+    if (error.response) {
+      console.error('Error response:', error.response);
+    }
+  }
+};
 
-  console.log(user);
-} catch (error) {
-toast.error('Sign in Failed')
-console.error(`something wrong with sign in `,error)
-}
-}
 
 
 
