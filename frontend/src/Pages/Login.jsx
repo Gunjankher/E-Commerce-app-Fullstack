@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import {FcGoogle} from 'react-icons/fc'
 import { auth } from '../firebase'
-import { useLoginMutation } from '../redux/api/userApi'
+import { useLoginMutation } from '../redux/api/userApi.js'
 
 
 function Login() {
@@ -20,15 +20,26 @@ const loginHandler = async () => {
     const provider = new GoogleAuthProvider();
     const { user } = await signInWithPopup(auth, provider);
 
-    const res = await login({
-      name: "gk",
-      email: "sdaf",
-      gender,
+    console.log({
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+      gender: gender, // Make sure this variable is defined somewhere in your code
       role: "user",
-      dob: date,
-      _id: "gkkk"
+      dob: date, // Make sure this variable is defined somewhere in your code
+      _id: user.uid,
     });
-
+    
+    const res = await login({
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+      gender: gender, // Make sure this variable is defined somewhere in your code
+      role: "user",
+      dob: date, // Make sure this variable is defined somewhere in your code
+      _id: user.uid,
+    });
+    
     if (res && res.data) {
       toast.success(res.data.message);
     } else if (res && res.error) {
