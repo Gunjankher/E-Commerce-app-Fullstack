@@ -1,4 +1,5 @@
 import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import axios from 'axios'
 
 
 
@@ -20,6 +21,17 @@ export const userAPI = createApi({
         })})
 })
 })
+
+
+export const getUSer = async(id)=>{
+    try {
+        const {data} = await axios.get(`${server}/api/v1/users/${id}`)
+        return data
+    } catch (error) {
+        console.error(`error while getting user`, error);
+      
+    }
+}
 
 
 export const {useLoginMutation} = userAPI

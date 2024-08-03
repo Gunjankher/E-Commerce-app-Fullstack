@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './styles/app.scss'
@@ -8,6 +8,8 @@ import Loader from './components/Loader.jsx'
 import {Toaster} from 'react-hot-toast'
 import { store } from './redux/store.js'
 import {Provider} from 'react-redux'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from './firebase.js'
 
 
 // ADMIN ROUTES
@@ -42,6 +44,12 @@ const Search = lazy(()=> import('./Pages/Search.jsx'))
 const Shipping = lazy(()=> import('./Pages/Shipping.jsx'))
 const Login = lazy(()=>import('./Pages/Login.jsx'))
 const Orders = lazy(()=> import("./Pages/Orders.jsx"))
+
+
+
+
+
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(

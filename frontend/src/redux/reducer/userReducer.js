@@ -10,5 +10,11 @@ export const userReducer = createSlice({
       state.loading = false;
       state.user = action.payload;
     },
+    userNotExist: (state, action) => {
+      state.loading = true;
+    state.user = null
+    },
   },
 });
+
+export const {userExist,userNotExist} = userReducer.actions
