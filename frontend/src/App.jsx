@@ -4,7 +4,8 @@ import { Outlet } from 'react-router-dom'
 import { auth } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useDispatch } from 'react-redux'
-import { userExist } from './redux/reducer/userReducer'
+import { userExist, userNotExist } from './redux/reducer/userReducer'
+import { getUser } from './redux/api/userApi'
 
 
 
@@ -16,13 +17,17 @@ const dispatch = useDispatch()
   
 
 useEffect(()=>{
-  onAuthStateChanged(auth,(user)=>{
+  onAuthStateChanged(auth,async(user)=>{
     if(user){
-      console.log(`user Logged in`)  
-      dispatch(userExist())
-    }
+   const data = await getUser(user.uid)
+      dispatch(userExist(data?.users))
+      
+     }
+    
     else{
-      console.log(`not Logged In`);
+   dispatch(userNotExist())
+   console.log(`logged out`);
+   
       
     }
   })
