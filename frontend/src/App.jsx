@@ -19,8 +19,14 @@ const dispatch = useDispatch()
 useEffect(()=>{
   onAuthStateChanged(auth,async(user)=>{
     if(user){
-   const data = await getUser(user.uid)
-      dispatch(userExist(data?.users))
+   const data = await getUser(user._id)
+ console.log(data);
+ 
+   
+     dispatch(userExist(data?.users))
+
+
+      
       
      }
     
