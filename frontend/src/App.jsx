@@ -10,6 +10,7 @@ import { getUser } from './redux/api/userApi'
 
 
 
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -19,15 +20,12 @@ const dispatch = useDispatch()
 useEffect(()=>{
   onAuthStateChanged(auth,async(user)=>{
     if(user){
-   const data = await getUser(user._id)
- console.log(data);
+  const data = await getUser(user.uid)
+  dispatch(userExist(data.user))
+ console.log(`getuserff`, data);
  
    
      dispatch(userExist(data?.users))
-
-
-      
-      
      }
     
     else{

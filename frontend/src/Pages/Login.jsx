@@ -24,7 +24,7 @@ const loginHandler = async () => {
       name: user.displayName,
       email: user.email,
       photo: user.photoURL,
-      gender: gender, // Make sure this variable is defined somewhere in your code
+      gender,
       role: "user",
       dob: date, // Make sure this variable is defined somewhere in your code
       _id: user.uid,
@@ -34,8 +34,9 @@ const loginHandler = async () => {
       name: user.displayName,
       email: user.email,
       photo: user.photoURL,
-      gender: gender, // Make sure this variable is defined somewhere in your code
-      dob: date, // Make sure this variable is defined somewhere in your code
+      gender,
+      role :"user",
+      dob: date,
       _id: user.uid,
     });
     

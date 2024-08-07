@@ -21,14 +21,20 @@ export const userAPI = createApi({
   }),
 });
 
-export const getUser = async (id) => {
+ const getUser = async (id) => {
   try {
     const { data } = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/users/${id}`);
     return data;
   } catch (error) {
     throw error;
   }
+
 };
+
+
+export{
+  getUser,
+}
 
 
 export const { useLoginMutation } = userAPI;
