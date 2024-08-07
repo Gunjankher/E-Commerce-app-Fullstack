@@ -20,15 +20,15 @@ const loginHandler = async () => {
     const provider = new GoogleAuthProvider();
     const { user } = await signInWithPopup(auth, provider);
 
-    console.log({
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-      gender,
-      role: "user",
-      dob: date, // Make sure this variable is defined somewhere in your code
-      _id: user.uid,
-    });
+    // console.log({
+    //   name: user.displayName,
+    //   email: user.email,
+    //   photo: user.photoURL,
+    //   gender,
+    //   role: "user",
+    //   dob: date, // Make sure this variable is defined somewhere in your code
+    //   _id: user.uid,
+    // });
     
     const res = await login({
       name: user.displayName,
@@ -40,6 +40,10 @@ const loginHandler = async () => {
       _id: user.uid,
     });
     
+console.log(`resData`, res.data);
+
+
+
     if (res && res.data) {
       toast.success(res.data.message);
     } else if (res && res.error) {
@@ -50,7 +54,7 @@ const loginHandler = async () => {
       toast.error('Unknown error occurred');
     }
 
-    console.log(user);
+    // console.log(user);
   } catch (error) {
     toast.error('Sign in Failed');
     console.error('Something went wrong with sign in', error);

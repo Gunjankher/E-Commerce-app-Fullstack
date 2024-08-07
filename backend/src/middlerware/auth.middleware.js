@@ -7,6 +7,7 @@ import { ApiError } from "../utilis/ApiError.js";
 const adminOnly = asyncHandler(async (req, res, next) => {
     try {
       const { id } = req.params;
+      // const { id } = req.query;
   
       if (!id) {
         return next(new ApiError(400, "Login first"));
