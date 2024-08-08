@@ -1,0 +1,8 @@
+Error: read ECONNRESET
+    at TLSWrap.onStreamRead (node:internal/stream_base_commons:217:20)
+
+=> restart the sever 
+
+
+
+

@@ -19,20 +19,19 @@ const dispatch = useDispatch()
 
 useEffect(()=>{
   onAuthStateChanged(auth,async(user)=>{
-    if(user){
-  const data = await getUser(user.uid)
-  dispatch(userExist(data.user))
- console.log(`getuserff`, data);
- 
-   
-     dispatch(userExist(data?.users))
-     }
-    
-    else{
-   dispatch(userNotExist())
-   console.log(`logged out`);
-   
-      
+    if (user) {
+      const response = await getUser(user.uid);
+      console.log('getUser response:', response); // Add this log to check the response structure
+
+      if (response && response.data) {
+        const dispatchedData = dispatch(userExist(response.data));
+        console.log('Dispatched data:', dispatchedData);
+      } else {
+        console.error('Invalid user data structure:', response);
+      }
+    } else {
+      dispatch(userNotExist());
+      console.log('logged out');
     }
   })
 },[])
