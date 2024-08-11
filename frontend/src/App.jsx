@@ -21,7 +21,7 @@ useEffect(()=>{
   onAuthStateChanged(auth,async(user)=>{
     if (user) {
       const response = await getUser(user.uid);
-      console.log('getUser response:', response); // Add this log to check the response structure
+      console.log('getUser response:', response); 
 
       if (response && response.data) {
         const dispatchedData = dispatch(userExist(response.data));
