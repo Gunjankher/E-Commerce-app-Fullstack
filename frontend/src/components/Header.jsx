@@ -1,19 +1,30 @@
 import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
 import {FaSearch, FaShoppingBag, FaSignInAlt, FaUser,FaSignOutAlt} from "react-icons/fa"
+import toast from 'react-hot-toast'
+import { signOut } from 'firebase/auth'
+import { auth } from '../firebase'
 
-const user = {
-  _id : "",
-  role :"",
-}
 
-function Header() {
+// const user = {
+//   _id : "", 
+//   role :"",
+// }
+
+function Header({user}) {
 
 const [isopen,setIsopen] = useState(false)
 
 
-const logoutHandlar= ()=>{
-  setIsopen(false)
+const logoutHandlar= async()=>{
+try {
+  await signOut(auth)
+  toast.success("Sign out SucessFully")
+    setIsopen(false)
+} catch (error) {
+  toast.error("Sign Out failed")
+  console.error ('signout Failed' , error)
+}
 }
 
 
