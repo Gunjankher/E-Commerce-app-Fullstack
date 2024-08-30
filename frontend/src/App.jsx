@@ -47,11 +47,11 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const response = await getUser(user.uid);
-        console.log('getUser response:', response);
+        // console.log('getUser response:', response);
 
         if (response && response.data) {
           const dispatchedData = dispatch(userExist(response.data));
-          console.log('Dispatched data:', dispatchedData);
+          // console.log('Dispatched data:', dispatchedData);
         } else {
           console.error('Invalid user data structure:', response);
         }

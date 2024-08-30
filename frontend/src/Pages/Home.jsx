@@ -8,13 +8,18 @@ const img = 'https://m.media-amazon.com/images/I/71jG+e7roXL._AC_UY218_.jpg'
 
 function Home() {
 
-const {} = useLatestProductQuery("")
+const {isLoading, error ,data} = useLatestProductQuery("")
+
 
 
 
   const addToCartHandlar = ()=>{
 
   }
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading products</div>;
+
 
   return (
     <div className='home'>
@@ -27,15 +32,31 @@ const {} = useLatestProductQuery("")
   </Link>
       </h1> 
       <main>
-<ProductCard 
-productId="sfsfsf"
-name="Macbook"
-price={45644}
-stock={50}
-handler={addToCartHandlar}
-photo={img}
 
-/>
+      {data?.data.length > 0 ? (
+          data?.data.map((i) => (
+            <ProductCard
+              key={i._id}
+              productId={i._id}
+              name={i.name}
+              price={i.price}
+              stock={i.stock}
+              handler={addToCartHandlar}
+              photo={i.photos}
+            />
+          ))
+        ) : (
+          <div>No products found</div>
+        )}
+
+{
+  data?.data?.forEach((i) => {
+    console.log(`Product: ${i.name}, Photos:`, i.photos);
+  })
+  
+}
+
+
 
       </main>
     </div>
@@ -43,3 +64,7 @@ photo={img}
 }
 
 export default Home
+
+
+
+
