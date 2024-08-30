@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import { useLatestProductQuery } from '../redux/api/productApi'
 import toast from 'react-hot-toast'
+import Loader, { Skeleton } from '../components/Loader'
 
 
 const img = 'https://m.media-amazon.com/images/I/71jG+e7roXL._AC_UY218_.jpg'
@@ -35,21 +36,27 @@ const {isLoading, error ,data} = useLatestProductQuery("")
       </h1> 
       <main>
 
-      {data?.data.length > 0 ? (
-          data?.data.map((i) => (
-            <ProductCard
-              key={i._id}
-              productId={i._id}
-              name={i.name}
-              price={i.price}
-              stock={i.stock}
-              handler={addToCartHandlar}
-              photo={i.photos}
-            />
-          ))
-        ) : (
-          <div>No products found</div>
-        )}
+      {
+        isLoading ? (
+          <Skeleton width='80vw' />
+        ) :(
+          data?.data.length > 0 ? (
+            data?.data.map((i) => (
+              <ProductCard
+                key={i._id}
+                productId={i._id}
+                name={i.name}
+                price={i.price}
+                stock={i.stock}
+                handler={addToCartHandlar}
+                photo={i.photos}
+              />
+            ))
+          ) : (
+            <div>No products found</div>
+          )
+        )
+      }
 
 {
   data?.data?.forEach((i) => {
