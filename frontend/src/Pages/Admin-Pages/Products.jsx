@@ -125,7 +125,7 @@ useEffect(() => {
           photo: (
             <img
               src={`${server}/${i.photos[0]?.url}`}
-              alt={i.name}
+             
             />
           ),
           name: i.name,
