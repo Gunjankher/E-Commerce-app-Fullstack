@@ -94,9 +94,14 @@ const columns = [
 const Products = () => {
 
   const {user} = useSelector((state)=>state.userReducer)
-  const {data,isLoading,error} = useAllProductsQuery(user?._id)
+  // const {data,isLoading,error} = useAllProductsQuery(user?._id)
+  
+  
+  const { data, isLoading, error, refetch } = useAllProductsQuery(user?._id, {
+    refetchOnWindowFocus: true, // Ensure data is refetched on focus
+  });
+  
   const [rows,setRows] = useState([]);
-
 
 
 // useEffect(()=>{
@@ -113,9 +118,11 @@ const Products = () => {
 // },[data])
 
 
+
+
+
 useEffect(() => {
-  if (data && data.data) {
-    if (data.data.length > 0) {
+    if (data?.data && data?.data.length > 0) {
       setRows(
         data?.data?.map((i) => ({
           photo: (
@@ -131,7 +138,7 @@ useEffect(() => {
         }))
       );
     } 
-  }
+  
 }, [data]);
 
 
