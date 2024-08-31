@@ -94,12 +94,9 @@ const columns = [
 const Products = () => {
 
   const {user} = useSelector((state)=>state.userReducer)
-  // const {data,isLoading,error} = useAllProductsQuery(user?._id)
+  const {data,isLoading,error} = useAllProductsQuery(user?._id)
   
-  
-  const { data, isLoading, error, refetch } = useAllProductsQuery(user?._id, {
-    refetchOnWindowFocus: true, // Ensure data is refetched on focus
-  });
+
   
   const [rows,setRows] = useState([]);
 
