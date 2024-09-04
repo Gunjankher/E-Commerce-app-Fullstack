@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
 import ProductCard from '../components/ProductCard'
+import { useCategoriesQuery, useSearchProductsQuery } from '../redux/api/productApi'
+import { server } from '../redux/store'
 
 function Search() {
+
+     const {data:categoriesResponse, isLoading:loadingCategories, isError,error} = useCategoriesQuery()
+
+ // console.log(`categoriresResponse` , categoriesResponse);
+
 
 const [search,setSearch] = useState("")
 const [sort,setSort] = useState("")
@@ -9,15 +16,23 @@ const [maxPrice,setMaxPrice] = useState(100000)
 const[category,setCategory] = useState("")
 const [page,setPage] = useState(1)
 
+const {isLoading:productLoading, data:searchedData} = useSearchProductsQuery( {
+  search,
+  sort,
+  category,
+  page,
+  price:maxPrice,
+})
+
+console.log(`Searched Data`, searchedData);
+
 
  const isNextPage = true
  const isPreviousPage = true
 const img = 'https://m.media-amazon.com/images/I/71jG+e7roXL._AC_UY218_.jpg'
 
 
-const addToCartHandlar = ()=>{
-
-}
+const addToCartHandlar = ()=>{}
 
 
 
@@ -52,8 +67,12 @@ const addToCartHandlar = ()=>{
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="">ALL</option>
-          <option value="">Sample1</option>
-          <option value="">Sample 2</option>
+      {
+        loadingCategories === false&& categoriesResponse?.data?.map((i)=>(
+          <option  key = {i}value={i}>{i.toUpperCase()}</option>
+        ))
+      }
+        
         
         </select>
       </div>
@@ -68,16 +87,21 @@ const addToCartHandlar = ()=>{
       />
 
         <div className="search-product-list">
+     {
+      searchedData?.data?.map((i)=>(
         <ProductCard
-      
-        productId="sfsfsf"
-name="Macbook"
-price={45644}
-stock={50}
+        key={i.name}
+       productId={i._id}
+       name={i.name}
+       price={i.price}
+       stock={i.stock}
+       photo={i.photo}
 handler={addToCartHandlar}
-photo={img}
-        
+   
+
         />
+      ))
+     }
         </div>
 <article>
   <button

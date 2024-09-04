@@ -102,7 +102,7 @@ function App() {
             >
               <Route path="/admin/dashboard" element={<DashBoard />} />
               <Route path="/admin/products" element={<Products />} />
-              <Route path="/admin/customers" element={<Customers />} />
+              <Route path="/admin/customer" element={<Customers />} />
               <Route path="/admin/transaction" element={<Transcation />} />
               {/* <Route path="/admin/discount" element={<Discount />} /> */}
               <Route path="/admin/chart/bar" element={<BarCharts />} />

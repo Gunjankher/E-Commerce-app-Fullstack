@@ -47,41 +47,20 @@ const Products = () => {
   }
 
 
-  // useEffect(() => {
-  //   if (data?.data && data.data.length > 0) {
-  //     setRows(
-  //       data?.data?.map((i) => ({
-  //         photo: <img src={`${server}/${i.photos[0]?.url}`} alt={i.name} />,
-  //         name: i.name,
-  //         price: i.price,
-  //         stock: i.stock,
-  //         action: <Link to={`/admin/product/${i._id}`}>Manage</Link>,
-  //       }))
-  //     )
-  //   } else {
-  //    console.log(`fk yaar`);
-     
-  //   }
-  // }, [data]);
-
-
-
-  const mapDataToRows = (data) => {
-    return data?.map((i) => ({
-      photo: <img src={`${server}/${i.photos[0]?.url}`} alt={i.name} />,
-      name: i.name,
-      price: i.price,
-      stock: i.stock,
-      action: <Link to={`/admin/product/${i._id}`}>Manage</Link>,
-    }));
-  };
-
   useEffect(() => {
     if (data?.data && data.data.length > 0) {
-      const mappedRows = mapDataToRows(data.data);
-      setRows(mappedRows);
+      setRows(
+        data?.data?.map((i) => ({
+          photo: <img src={`${server}/${i.photos[0]?.url}`} alt={i.name} />,
+          name: i.name,
+          price: i.price,
+          stock: i.stock,
+          action: <Link to={`/admin/product/${i._id}`}>Manage</Link>,
+        }))
+      )
     } else {
-      console.log('No products found');
+     console.log(`fk yaar`);
+     
     }
   }, [data]);
 
@@ -102,7 +81,7 @@ const Products = () => {
 
   const Table = useCallback(
     TableHOC(columns, rows, "dashboard-product-box", "Products", true),
-    []
+    [rows]
   );
 
   
