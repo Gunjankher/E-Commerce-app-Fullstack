@@ -88,14 +88,14 @@ const addToCartHandlar = ()=>{}
 
         <div className="search-product-list">
      {
-      searchedData?.data?.map((i)=>(
+      searchedData?.data[0]?.map((i)=>(
         <ProductCard
-        key={i.name}
+        key={i._id}
        productId={i._id}
        name={i.name}
        price={i.price}
        stock={i.stock}
-       photo={i.photo}
+       photo={`${server}/${i.photos[0]?.url}`}
 handler={addToCartHandlar}
    
 
@@ -103,17 +103,21 @@ handler={addToCartHandlar}
       ))
      }
         </div>
-<article>
+{
+  searchedData && searchedData.totalPage>1 &&(
+    <article>
   <button
    onClick={()=>setPage((prev)=> prev-1)}
    disabled = {!isPreviousPage}
    >prev</button>
-  <span>{page}of {4}</span>
+  <span>{page}of {searchedData.totalPage}</span>
   <button 
   onClick={()=>setPage((prev)=> prev+1)}
   disabled = {!isNextPage}
   >next</button>
 </article>
+  )
+}
     </main>
   </div>
   )

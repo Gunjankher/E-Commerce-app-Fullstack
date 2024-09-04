@@ -18,13 +18,18 @@ export const productAPI = createApi({
         if (category) base += `&category=${category}`;
 
         return base;
-     }})
+     }}),
+     newProduct : builder.mutation({query :({formData,id})=> ({
+        url:`new?id=${id}`,
+        method : "Post",
+        body :formData,
+     })}),
   })
 
   })
   
 
-  export const {useLatestProductQuery,useAllProductsQuery,useCategoriesQuery,useSearchProductsQuery} = productAPI
+  export const {useLatestProductQuery,useAllProductsQuery,useCategoriesQuery,useSearchProductsQuery,useNewProductMutation} = productAPI
 
 
 
