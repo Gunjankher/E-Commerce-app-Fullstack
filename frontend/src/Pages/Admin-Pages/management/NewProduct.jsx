@@ -1,12 +1,28 @@
 import React, { useState } from 'react'
 import AdminSideBar from './../../../components/Admin-components/AdminSideBar'
+import { useSelector } from 'react-redux'
+import { useNewProductMutation } from '../../../redux/api/productApi'
+import { useNavigate } from 'react-router-dom'
+import { responseToast } from '../../../utilis/feature'
+
 
 function NewProduct() {
  
+const {user} = useSelector((state)=>state.userReducer)
+
+
   const [name,setName] = useState("")
   const [price,setPrice] = useState(Number)
   const [stock,setStock] = useState(Number)
   const [photo,setPhoto] = useState("")
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+
+
+const [newProduct] = useNewProductMutation() 
+
+const navigate = useNavigate()
+
 
   const changeImageHandler = (e)=>{
  const file = e.target.files?.[0]
@@ -18,10 +34,29 @@ if(file){
   reader.onloadend=()=>{
     if(typeof reader.result === "string") setPhoto(reader.result)
   }
+} }
+
+const submithandler = async(e)=>{
+e.preventDefault()
+
+if(!name || !price || !stock || !category || !photo) return 
+
+const formData = new FormData()
+
+formData.set("name", name);
+formData.set("description", description);
+formData.set("price", price.toString());
+formData.set("stock", stock.toString());
+formData.set("photo", photo)
+formData.set("category",category);
+
+const res = await newProduct({ id :user?._id, formData}) 
+responseToast(res,navigate,"/admin/product")
+
+
+ 
+
 }
-
-
-  }
 
 
   return (
@@ -30,7 +65,7 @@ if(file){
       <main className='product-management'>
 
 <article>
-<form>
+<form onSubmit={submithandler}>
 <h2>New Product</h2>
 
 <div>
@@ -65,7 +100,16 @@ min={0}
 onChange={(e)=>setStock(Number(e.target.value))}
 />
 </div>
-
+<div>
+              <label>Category</label>
+              <input
+                required
+                type="text"
+                placeholder="eg. laptop, camera etc"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              />
+            </div>
 <div>
   <label>photo</label>
 <input 
