@@ -1,5 +1,9 @@
 import multer from "multer";
 import { v4 as uuid } from "uuid";
+import fs from 'fs'
+
+
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -12,6 +16,7 @@ const storage = multer.diskStorage({
   },
 });
 
+
 export const upload = multer({
   storage,
 });
@@ -21,3 +26,14 @@ export const singleUpload = upload.single("photo"); // Ensure this matches the f
 
 // Multiple file upload (expecting "photos" field in the form data)
 export const mutliUpload = upload.array("photos", 5);
+
+
+// Function to convert base64 to image file
+export const convertBase64ToImage = (base64String, outputPath) => {
+  // Create a buffer from the base64 string
+  const buffer = Buffer.from(base64String, "base64");
+  
+  // Write the buffer to a new image file
+  fs.writeFileSync(outputPath, buffer);
+  console.log(`Image saved to ${outputPath}`);
+};
