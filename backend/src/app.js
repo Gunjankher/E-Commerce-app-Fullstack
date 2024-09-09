@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import NodeCache from 'node-cache'
 import morgan from 'morgan'
 import stripe from 'stripe'
+import path from 'path'
 
 
 const app = express()
@@ -15,7 +16,23 @@ app.use(cors({
 }))
 
 
-
+app.post('/upload-base64', (req, res) => {
+    const base64Data = req.body.photos.replace(/^data:image\/jpeg;base64,/, "");
+    const buffer = Buffer.from(base64Data, 'base64');
+  
+    // Define a unique filename and path to save the image
+    const fileName = `image_${Date.now()}.jpg`;
+    const filePath = path.join(__dirname, 'public/temp', fileName);
+  
+    fs.writeFile(filePath, buffer, (err) => {
+      if (err) {
+        console.error('Error saving image:', err);
+        return res.status(500).send('Error saving image');
+      }
+      res.status(200).send('Image uploaded successfully');
+    });
+  });
+  
 
 const stripeKey = process.env.STRIPE_KEY || ""
 

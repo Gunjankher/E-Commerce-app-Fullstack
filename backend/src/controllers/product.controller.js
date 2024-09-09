@@ -6,11 +6,19 @@ import { rm } from "fs";
 import mongoose from "mongoose";
 import { myCache } from "../app.js";
 import { invalidateCache } from "../utilis/invalidateCache.js";
+import { saveBase64Image } from "../utilis/base64ImageHandler.js";
+
 
 const newProduct = asyncHandler(async (req, res, next) => {
   try {
+
+    
     const { name, price, stock, category, description } = req.body;
-    const photos = req.file; // Adjusted to handle a single file
+    const photos = req.file; 
+    console.log(`photo req` , req.file);
+
+     
+
 
     // Log incoming data for debugging purposes
     console.log("Incoming data:", {
@@ -22,6 +30,10 @@ const newProduct = asyncHandler(async (req, res, next) => {
       description,
     });
 
+
+
+
+
     if (!photos) {
       return next(new ApiError(401, "Please Add Photo"));
     }
@@ -32,13 +44,14 @@ const newProduct = asyncHandler(async (req, res, next) => {
     if (photos.length > 5)
       return next(new ApiError(400, "You can only upload 5 Photos"));
 
+    const photoPath = saveBase64Image(photos)
     const photoObj = {
       public_id: photos.filename, // Assuming the filename is used as the public ID
       url: photos.path, // Assuming the path is used as the URL
     };
 
     if (!name || !price || !stock || !category || !description) {
-      rm(photos.path, () => {
+      rm(photoPath, () => {
         console.log("Deleted");
       });
       return next(new ApiError(400, "Enter all details first"));

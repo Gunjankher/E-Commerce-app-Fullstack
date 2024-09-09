@@ -45,7 +45,7 @@ console.log(`resData`, res.data);
 
 
     if (res && res.data) {
-      toast.success(res.data.message);
+      toast.success(res.data.message ,`sign in sucessfully`);
     } else if (res && res.error) {
       const error = res.error;
       const message = error.data || { message: 'Unknown error occurred' };

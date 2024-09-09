@@ -24,7 +24,7 @@ const {isLoading:productLoading, data:searchedData} = useSearchProductsQuery( {
   price:maxPrice,
 })
 
-console.log(`Searched Data`, searchedData);
+// console.log(`Searched Data`, searchedData);
 
 
  const isNextPage = true

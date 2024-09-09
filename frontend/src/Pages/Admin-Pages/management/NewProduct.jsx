@@ -1,28 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import AdminSideBar from './../../../components/Admin-components/AdminSideBar'
 import { useSelector } from 'react-redux'
 import { useNewProductMutation } from '../../../redux/api/productApi'
 import { useNavigate } from 'react-router-dom'
 import { responseToast } from '../../../utilis/feature'
+import { server } from '../../../redux/store'
+
 
 
 function NewProduct() {
  
 const {user} = useSelector((state)=>state.userReducer)
+// console.log(`user`, user);
 
 
   const [name,setName] = useState("")
   const [price,setPrice] = useState(Number)
   const [stock,setStock] = useState(Number)
-  const [photo,setPhoto] = useState("")
+  const [photos,setPhotos] = useState("")
   const [category, setCategory] = useState("");
-  const [description, setDescription] = useState("");
+  // const [description, setDescription] = useState("");
+  const fileInputRef = useRef(null);  // Create a ref for the file input
 
 
 const [newProduct] = useNewProductMutation() 
 
 const navigate = useNavigate()
-
 
   const changeImageHandler = (e)=>{
  const file = e.target.files?.[0]
@@ -32,31 +35,37 @@ const reader = new FileReader()
 if(file){
   reader.readAsDataURL(file)
   reader.onloadend=()=>{
-    if(typeof reader.result === "string") setPhoto(reader.result)
+    if(typeof reader.result === "string") setPhotos(reader.result)
   }
 } }
 
-const submithandler = async(e)=>{
-e.preventDefault()
 
-if(!name || !price || !stock || !category || !photo) return 
-
-const formData = new FormData()
-
-formData.set("name", name);
-formData.set("description", description);
-formData.set("price", price.toString());
-formData.set("stock", stock.toString());
-formData.set("photo", photo)
-formData.set("category",category);
-
-const res = await newProduct({ id :user?._id, formData}) 
-responseToast(res,navigate,"/admin/product")
+// const changeImageHandler = (e) => {
+//   const file = e.target.files?.[0];
+//   if (file) setPhoto(file);  // Store the file directly
+// };
 
 
- 
+const submithandler = async (e) => {
+  e.preventDefault();
 
-}
+  if (!name || !price || !stock || !category || !photos) return;
+
+  const formData = new FormData();
+  formData.set("name", name);
+  formData.set("price", price.toString());
+  formData.set("stock", stock.toString());
+  formData.set("photos", photos); 
+  formData.set("category", category);
+
+  const res = await newProduct({
+    id: user?._id,
+    formData,
+  });
+
+  responseToast(res, navigate, "/admin/product");
+};
+
 
 
   return (
@@ -119,7 +128,7 @@ onChange={changeImageHandler}
 />
 </div>
 
-{photo && <img  src={photo} alt='new Image'/>}
+{photos && <img  src={photos} alt='new Image'/>}
 
 <button type='submit'>Create</button>
 
