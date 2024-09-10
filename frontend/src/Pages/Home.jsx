@@ -60,7 +60,7 @@ const {isLoading, error ,data} = useLatestProductQuery("")
 
 {
   data?.data?.forEach((i) => {
-    console.log(`Product: ${i.name}, Photos:`, i.photos);
+    // console.log(`Product: ${i.name}, Photos:`, i.photos);
   })
   
 }

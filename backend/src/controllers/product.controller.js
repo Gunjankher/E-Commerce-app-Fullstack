@@ -6,7 +6,8 @@ import { rm } from "fs";
 import mongoose from "mongoose";
 import { myCache } from "../app.js";
 import { invalidateCache } from "../utilis/invalidateCache.js";
-import { saveBase64Image } from "../utilis/base64ImageHandler.js";
+import {saveBase64Image} from '../utilis/imageHelper.js'
+
 
 
 // const newProduct = asyncHandler(async (req, res, next) => {
@@ -104,50 +105,60 @@ import { saveBase64Image } from "../utilis/base64ImageHandler.js";
 
 // revavidate on new update and delete product and new order
 
-
-
 const newProduct = asyncHandler(async (req, res, next) => {
   try {
-    const { name, price, stock, category, description, imageData } = req.body;
-    const photos = req.file; // Use this if you're uploading via multer
+
+    
+    const { name, price, stock, category, description,photos } = req.body;
+    // const photos = req.file; 
+    // console.log(`photo req` , req.file);
+
+    console.log(`req.body`, req.body);
+    
+     
+
+
+
+    
 
     // Log incoming data for debugging purposes
-    console.log("Incoming data:", {
+    console.log("Incoming data:", typeof photos, {
       name,
       price,
       stock,
       category,
-      photos,
-      description,
+      
+      
     });
 
-    let photoObj;
 
-    // Check if photo is provided via base64 string or file upload
-    if (imageData) {
-      // If base64 string is provided
-      const outputImagePath = `./public/temp/${Date.now()}-uploadedImage.jpg`;
-      saveBase64Image(imageData, outputImagePath); // Convert and save the base64 image
-      photoObj = {
-        public_id: outputImagePath.split("/").pop(), // Use the filename as the public ID
-        url: outputImagePath, // Use the path as the URL
-      };
-    } else if (photos) {
-      // If file is provided via Multer (as before)
-      photoObj = {
-        public_id: photos.filename, // Assuming the filename is used as the public ID
-        url: photos.path, // Assuming the path is used as the URL
-      };
-    } else {
-      return next(new ApiError(401, "Please Add Photo or Image Data"));
+
+
+
+
+    if (!photos) {
+      return next(new ApiError(401, "Please Add Photo"));
     }
+    
+ 
+
+    if (photos.length < 1)
+      return next(new ApiError(400, "Please add atleast one Photo"));
+
+    if (photos.length > 5)
+      return next(new ApiError(400, "You can only upload 5 Photos"));
+
+
+
+    const photoObj = {
+      public_id: photos.filename, // Assuming the filename is used as the public ID
+      url: photos.path, // Assuming the path is used as the URL
+    };
 
     if (!name || !price || !stock || !category || !description) {
-      if (photoObj && photoObj.url) {
-        fs.unlink(photoObj.url, () => {
-          console.log("Deleted temp image");
-        });
-      }
+      rm(photoPath, () => {
+        console.log("Deleted");
+      });
       return next(new ApiError(400, "Enter all details first"));
     }
 
@@ -176,8 +187,6 @@ const newProduct = asyncHandler(async (req, res, next) => {
     return next(new ApiError(401, error.message, "Cannot Create Product"));
   }
 });
-
-
 
 
 

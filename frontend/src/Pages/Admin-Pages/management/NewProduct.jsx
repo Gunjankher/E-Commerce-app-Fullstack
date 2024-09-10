@@ -53,22 +53,23 @@ const submithandler = async (e) => {
   e.preventDefault();
 
   if (!name || !price || !stock || !category || !photos) return;
-  const productData = {
-    name,
-    price: price.toString(),
-    stock: stock.toString(),
-    category,
-    photos,  // This is the base64 encoded image
-  };
 
-  // Send the JSON object as the request body
+  const formData = new FormData();
+  formData.set("name", name);
+  formData.set("price", price.toString());
+  formData.set("stock", stock.toString());
+  formData.set("photos", photos); 
+  formData.set("category", category);
+
   const res = await newProduct({
     id: user?._id,
-    ...productData,
+    formData,
   });
 
   responseToast(res, navigate, "/admin/product");
 };
+
+
 
 
 
