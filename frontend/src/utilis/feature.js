@@ -11,7 +11,7 @@ export const responseToast = (res, navigate, url) => {
   } else {
     const error = res.error;
     const messageResponse = error.data;
-    toast.error(messageResponse.message);
+    toast.error(messageResponse?.message);
   }
 };
 

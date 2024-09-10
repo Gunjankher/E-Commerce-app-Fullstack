@@ -22,6 +22,7 @@ export const productAPI = createApi({
      newProduct : builder.mutation({query :({formData,id})=> ({
         url:`new?id=${id}`,
         method : "Post",
+        'Content-Type': 'application/json',
         body :formData,
      })}),
   })

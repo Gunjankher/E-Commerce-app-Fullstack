@@ -4,7 +4,9 @@ import cookieParser from 'cookie-parser'
 import NodeCache from 'node-cache'
 import morgan from 'morgan'
 import stripe from 'stripe'
-import path from 'path'
+import path, { dirname } from 'path'
+import fs from 'fs'
+import {fileURLToPath} from 'url'
 
 
 const app = express()
@@ -15,9 +17,7 @@ app.use(cors({
     credentials : true
 }))
 
-
-
-  
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const stripeKey = process.env.STRIPE_KEY || ""
 
@@ -27,7 +27,7 @@ export const newStripe = new stripe(stripeKey)
 export const myCache = new NodeCache()
 
 
-app.use(express.json({limit: "16kb"}))
+app.use(express.json())
 app.use(express.urlencoded({extended: true ,limit : "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
@@ -50,5 +50,7 @@ app.use("/api/v1/dashboard",dashBoardRouter)
 
 
 app.use("/public/temp",express.static("public/temp"))
+// app.use("/public/temp", express.static(path.join(__dirname, 'public/temp')));
+
 
 export  {app}

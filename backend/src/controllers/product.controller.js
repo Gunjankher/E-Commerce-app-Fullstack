@@ -3,10 +3,16 @@ import { Product } from "../models/products.model.js";
 import { ApiError } from "../utilis/ApiError.js";
 import { ApiResponse } from "../utilis/ApiResponse.js";
 import { rm } from "fs";
-import mongoose from "mongoose";
-import { myCache } from "../app.js";
+import { app, myCache } from "../app.js";
 import { invalidateCache } from "../utilis/invalidateCache.js";
-import {saveBase64Image} from '../utilis/imageHelper.js'
+import { upload } from "../middlerware/multer.middleware.js";
+import multer from "multer";
+import fs from 'fs'
+import path, { dirname } from 'path'
+import {fileURLToPath} from 'url'
+
+
+
 
 
 
@@ -109,14 +115,11 @@ const newProduct = asyncHandler(async (req, res, next) => {
   try {
 
     
-    const { name, price, stock, category, description,photos } = req.body;
+    const { name, price, stock, category, description, photos } = req.body;
     // const photos = req.file; 
-    // console.log(`photo req` , req.file);
+  
 
-    console.log(`req.body`, req.body);
-    
-     
-
+  
 
 
     
@@ -132,21 +135,64 @@ const newProduct = asyncHandler(async (req, res, next) => {
     });
 
 
-
-
-
-
+    // Check if a base64 image string is provided
     if (!photos) {
-      return next(new ApiError(401, "Please Add Photo"));
-    }
+      console.log("No image provided in the request.");
+      return res.status(400).json({ message: 'Please provide an image.' });
+  }
+
+  console.log("Image provided in base64 format.");
+
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+
+  // Remove the prefix from the base64 string (e.g., 'data:image/jpeg;base64,')
+  const base64Data = photos.replace(/^data:image\/\w+;base64,/, "");
+
+  // Log the cleaned base64 data
+  console.log("Base64 data after removing prefix:", base64Data.substring(0, 30) + "..."); // Log part of it to avoid clutter
     
  
+  // Convert base64 string to buffer
+  const imageBuffer = Buffer.from(base64Data, 'base64');
+
+  // Log after converting to buffer
+  console.log("Base64 converted to buffer.");
+
+
+ // Define where to save the image (e.g., in a folder called 'uploads')
+ const imageName = `${Date.now()}-product.jpg`;  // Unique name based on timestamp
+ const imagePath = path.join(__dirname, '../../public/temp', imageName);
+
+ // Log image path where it will be saved
+ console.log("Image will be saved at:", imagePath);
+
+
+ // Write the buffer to an image file
+  fs.writeFile(imagePath, imageBuffer, (err) => {
+  if (err) {
+      console.error('Error saving the image:', err);
+      return res.status(500).json({ message: 'Image upload failed.' });
+  }
+
+})
+
+
+  console.log("Image saved successfully.");
+
+  
+
+
+
+
+
+
+    
 
     if (photos.length < 1)
       return next(new ApiError(400, "Please add atleast one Photo"));
 
-    if (photos.length > 5)
-      return next(new ApiError(400, "You can only upload 5 Photos"));
+    // if (photos.length > 5)
+    //   return next(new ApiError(400, "You can only upload 5 Photos"));
 
 
 
@@ -156,7 +202,7 @@ const newProduct = asyncHandler(async (req, res, next) => {
     };
 
     if (!name || !price || !stock || !category || !description) {
-      rm(photoPath, () => {
+      rm(photoObj, () => {
         console.log("Deleted");
       });
       return next(new ApiError(400, "Enter all details first"));

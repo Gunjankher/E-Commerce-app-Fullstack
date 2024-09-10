@@ -17,10 +17,10 @@ const {user} = useSelector((state)=>state.userReducer)
   const [name,setName] = useState("")
   const [price,setPrice] = useState(Number)
   const [stock,setStock] = useState(Number)
-  const [photos,setPhotos] = useState("")
+  const [photos,setPhotos] = useState()
   const [category, setCategory] = useState("");
-  // const [description, setDescription] = useState("");
-  const fileInputRef = useRef(null);  // Create a ref for the file input
+  const [description, setDescription] = useState("");
+
 
 
 
