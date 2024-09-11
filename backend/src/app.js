@@ -50,7 +50,7 @@ app.use("/api/v1/dashboard",dashBoardRouter)
 
 
 app.use("/public/temp",express.static("public/temp"))
-// app.use("/public/temp", express.static(path.join(__dirname, 'public/temp')));
+// app.use("/public/temp", express.static(path.join(__dirname, '/public/temp')));
 
 
 export  {app}

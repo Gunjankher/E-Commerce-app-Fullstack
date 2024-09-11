@@ -66,7 +66,7 @@ const submithandler = async (e) => {
     formData,
   });
 
-  responseToast(res, navigate, "/admin/product");
+  responseToast(res, navigate, "/admin/products");
 };
 
 

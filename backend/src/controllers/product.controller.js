@@ -10,7 +10,6 @@ import multer from "multer";
 import fs from 'fs'
 import path, { dirname } from 'path'
 import {fileURLToPath} from 'url'
-import { Console, log } from "console";
 
 
 
@@ -114,7 +113,7 @@ import { Console, log } from "console";
 // revavidate on new update and delete product and new order
 
 const newProduct = asyncHandler(async (req, res, next) => {
-  try {
+  
 
     
     const { name, price, stock, category, description, photos } = req.body;
@@ -199,11 +198,9 @@ try {
   // Convert base64 string to buffer
   const imageBuffer = Buffer.from(base64Data, 'base64');
 
-  if (Buffer.isBuffer(imageBuffer)) {
-    console.log("ImageBuffer is a valid Buffer.");
-  } else {
-    console.log("ImageBuffer is not a valid Buffer.");
-  }
+  console.log('Image Buffer:', typeof imageBuffer);  // Should be 'object', but ensure it's an instance of Buffer
+console.log(`if buffer is buffer`,Buffer.isBuffer(imageBuffer));  // Should return true if imageBuffer is a valid Buffer
+
 
  
 
@@ -212,36 +209,32 @@ try {
   const imagePath = path.join(__dirname, '../../public/temp', imageName);
 
   // Log image path where it will be saved
-  console.log('Image path:', imagePath);  // Log to ensure this is a valid string
+  console.log('Image path:', typeof imagePath);  // Log to ensure this is a valid string
+  console.log('Image name:', typeof imageName);  // Log to ensure this is a valid string
 
   // Ensure the directory exists, or create it if needed
   const dirPath = path.join(__dirname, '../../public/temp')
+console.log(`dirpath`, dirPath);
+
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
 
 
-
-
-  // Write the buffer to an image file
-    const fsfile = fs.writeFile(imagePath,imageBuffer,(err) => {
+  
+  
+  fs.writeFile(imagePath, imageBuffer, (err) => {
     if (err) {
-      return next(new ApiError(500, 'Image upload failed.'));
-  
+      console.error('Image Write Error:', err);
+    } else {
+      console.log('Image written successfully.');
     }
-
-  
-
   });
-} catch (error) {
-  return next(new ApiError(500, 'Image upload failed.'));
-
-}
 
 
+  console.log('Type of photos:', typeof photos);
+  console.log('Is photos an array?', Array.isArray(photos));
 
-
-    
 
     if (photos.length < 1)
       return next(new ApiError(400, "Please add atleast one Photo"));
@@ -251,15 +244,19 @@ try {
 
 
 
+    // const photoObj = ({
+    //   public_id: photos.filename, // Make sure this field exists and is correctly assigned
+    //   url: photos.path, // Make sure this field exists and is correctly assigned
+    // });
+    
     const photoObj = {
-      public_id: photos.filename, // Assuming the filename is used as the public ID
-      url: photos.path, // Assuming the path is used as the URL
+      public_id: imageName,
+      url: `/public/temp/${imageName}`
     };
 
-    if (!name || !price || !stock || !category || !description) {
-      rm(photoObj, () => {
-        console.log("Deleted");
-      });
+
+
+    if (!name || !price || !stock || !category) {
       return next(new ApiError(400, "Enter all details first"));
     }
 
@@ -272,6 +269,14 @@ try {
       photos: [photoObj],
       description,
     });
+
+if(product){
+  console.log(` product is created`,);
+}else{
+  console.log(`product is not created`);
+  
+}
+
 
     await invalidateCache({ product: true, admin: true });
 
