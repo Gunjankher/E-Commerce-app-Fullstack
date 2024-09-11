@@ -132,8 +132,9 @@ type="file"
 onChange={changeImageHandler}
 />
 </div>
-
-{photos && <img  src={photos} alt='new Image'/>}
+{photos && (
+  <img src={photos} alt="Product Preview" style={{ width: '100px', height: '100px' }} />
+)}
 
 <button type='submit'>Create</button>
 

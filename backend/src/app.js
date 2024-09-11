@@ -49,8 +49,12 @@ app.use("/api/v1/payment",paymentRouter)
 app.use("/api/v1/dashboard",dashBoardRouter)
 
 
-app.use("/public/temp",express.static("public/temp"))
+// app.use("/public/temp",express.static("public/temp"))
 // app.use("/public/temp", express.static(path.join(__dirname, '/public/temp')));
+// app.use('/public/temp', express.static(path.join(__dirname, '/public/temp')));
+// Serve the public folder with static files
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 export  {app}

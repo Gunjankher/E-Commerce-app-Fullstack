@@ -248,12 +248,13 @@ console.log(`dirpath`, dirPath);
     //   public_id: photos.filename, // Make sure this field exists and is correctly assigned
     //   url: photos.path, // Make sure this field exists and is correctly assigned
     // });
-    
     const photoObj = {
       public_id: imageName,
-      url: `/public/temp/${imageName}`
+     url: `/public/temp/${imageName}`
     };
 
+    console.log(`photo obj`, photoObj);
+    
 
 
     if (!name || !price || !stock || !category) {
