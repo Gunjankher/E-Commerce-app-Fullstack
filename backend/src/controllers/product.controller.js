@@ -213,8 +213,8 @@ console.log(`if buffer is buffer`,Buffer.isBuffer(imageBuffer));  // Should retu
   console.log('Image name:', typeof imageName);  // Log to ensure this is a valid string
 
   // Ensure the directory exists, or create it if needed
-  const dirPath = path.join(__dirname, '../../public/temp')
-console.log(`dirpath`, dirPath);
+  const dirPath = path.join(__dirname, '/public/temp')
+// console.log(`dirpath`, dirPath);
 
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
@@ -232,8 +232,8 @@ console.log(`dirpath`, dirPath);
   });
 
 
-  console.log('Type of photos:', typeof photos);
-  console.log('Is photos an array?', Array.isArray(photos));
+  // console.log('Type of photos:', typeof photos);
+  // console.log('Is photos an array?', Array.isArray(photos));
 
 
     if (photos.length < 1)
