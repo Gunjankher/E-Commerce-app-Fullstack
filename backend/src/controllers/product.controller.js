@@ -10,6 +10,8 @@ import multer from "multer";
 import fs from 'fs'
 import path, { dirname } from 'path'
 import {fileURLToPath} from 'url'
+import { Console, log } from "console";
+
 
 
 
@@ -143,45 +145,98 @@ const newProduct = asyncHandler(async (req, res, next) => {
 
   console.log("Image provided in base64 format.");
 
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+//   const __dirname = dirname(fileURLToPath(import.meta.url));
+
+//   // Remove the prefix from the base64 string (e.g., 'data:image/jpeg;base64,')
+//   const base64Data = photos.replace(/^data:image\/\w+;base64,/, "");
+
+//   // Log the cleaned base64 data
+//   console.log("Base64 data after removing prefix:", base64Data.substring(0, 30) + "..."); // Log part of it to avoid clutter
+    
+ 
+//   // Convert base64 string to buffer
+//   const imageBuffer = Buffer.from(base64Data, 'base64');
+
+//   // Log after converting to buffer
+//   console.log("Base64 converted to buffer.");
+
+
+//  // Define where to save the image (e.g., in a folder called 'uploads')
+//  const imageName = `${Date.now()}-product.jpg`;  // Unique name based on timestamp
+//  const imagePath = path.join(__dirname, '../../public/temp', imageName);
+
+//  // Log image path where it will be saved
+//  console.log("Image will be saved at:", imagePath);
+
+
+//  // Write the buffer to an image file
+//   fs.writeFile(imagePath, imageBuffer, (err) => {
+//   if (err) {
+//       console.error('Error saving the image:', err);
+//       return res.status(500).json({ message: 'Image upload failed.' });
+//   }
+
+// })
+
+
+//   console.log("Image saved successfully.");
+
+  
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+try {
+  // Log incoming photos data type and partial content
+  console.log("Incoming photos data type:", typeof photos);
+  console.log("Incoming photos content (first 30 characters):", photos.substring(0, 30) + "...");
 
   // Remove the prefix from the base64 string (e.g., 'data:image/jpeg;base64,')
   const base64Data = photos.replace(/^data:image\/\w+;base64,/, "");
 
   // Log the cleaned base64 data
-  console.log("Base64 data after removing prefix:", base64Data.substring(0, 30) + "..."); // Log part of it to avoid clutter
-    
- 
+  console.log("Base64 data after removing prefix:", base64Data.substring(0, 30) + "...");
+
   // Convert base64 string to buffer
   const imageBuffer = Buffer.from(base64Data, 'base64');
 
-  // Log after converting to buffer
-  console.log("Base64 converted to buffer.");
-
-
- // Define where to save the image (e.g., in a folder called 'uploads')
- const imageName = `${Date.now()}-product.jpg`;  // Unique name based on timestamp
- const imagePath = path.join(__dirname, '../../public/temp', imageName);
-
- // Log image path where it will be saved
- console.log("Image will be saved at:", imagePath);
-
-
- // Write the buffer to an image file
-  fs.writeFile(imagePath, imageBuffer, (err) => {
-  if (err) {
-      console.error('Error saving the image:', err);
-      return res.status(500).json({ message: 'Image upload failed.' });
+  if (Buffer.isBuffer(imageBuffer)) {
+    console.log("ImageBuffer is a valid Buffer.");
+  } else {
+    console.log("ImageBuffer is not a valid Buffer.");
   }
 
-})
+ 
+
+  // Define where to save the image (e.g., in a folder called 'uploads')
+  const imageName = `${Date.now()}-product.jpg`;  // Unique name based on timestamp
+  const imagePath = path.join(__dirname, '../../public/temp', imageName);
+
+  // Log image path where it will be saved
+  console.log('Image path:', imagePath);  // Log to ensure this is a valid string
+
+  // Ensure the directory exists, or create it if needed
+  const dirPath = path.join(__dirname, '../../public/temp')
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
 
 
-  console.log("Image saved successfully.");
+
+
+  // Write the buffer to an image file
+    const fsfile = fs.writeFile(imagePath,imageBuffer,(err) => {
+    if (err) {
+      return next(new ApiError(500, 'Image upload failed.'));
+  
+    }
 
   
 
+  });
+} catch (error) {
+  return next(new ApiError(500, 'Image upload failed.'));
 
+}
 
 
 

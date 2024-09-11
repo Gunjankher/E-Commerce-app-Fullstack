@@ -36,14 +36,3 @@ export const singleUpload = upload.single("photo"); // Ensure this matches the f
 
 // Multiple file upload (expecting "photos" field in the form data)
 export const mutliUpload = upload.array("photos", 10);
-
-
-// // Function to convert base64 to image file
-// export const convertBase64ToImage = (base64String, outputPath) => {
-//   // Create a buffer from the base64 string
-//   const buffer = Buffer.from(base64String, "base64");
-  
-//   // Write the buffer to a new image file
-//   fs.writeFileSync(outputPath, buffer);
-//   console.log(`Image saved to ${outputPath}`);
-// };
