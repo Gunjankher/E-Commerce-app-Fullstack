@@ -40,7 +40,7 @@ const loginHandler = async () => {
       _id: user.uid,
     });
     
-console.log(`resData`, res.data);
+
 
 
 

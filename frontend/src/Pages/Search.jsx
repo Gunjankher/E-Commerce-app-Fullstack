@@ -95,10 +95,9 @@ const addToCartHandlar = ()=>{}
        name={i.name}
        price={i.price}
        stock={i.stock}
-       photo={`${server}/${i.photos[0]?.url}`}
+       photo={ `${server}${i.photos?.[0].url}`}
 handler={addToCartHandlar}
-   
-
+  
         />
       ))
      }

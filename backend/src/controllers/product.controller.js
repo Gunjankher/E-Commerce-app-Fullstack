@@ -213,7 +213,7 @@ console.log(`if buffer is buffer`,Buffer.isBuffer(imageBuffer));  // Should retu
   console.log('Image name:', typeof imageName);  // Log to ensure this is a valid string
 
   // Ensure the directory exists, or create it if needed
-  const dirPath = path.join(__dirname, '/public/temp')
+  const dirPath = path.join(__dirname, '../../public/temp')
 // console.log(`dirpath`, dirPath);
 
   if (!fs.existsSync(dirPath)) {
@@ -301,10 +301,10 @@ const getlatestProducts = asyncHandler(async (req, res, next) => {
   try {
     let products;
     if (myCache.has("latest-products"))
-      products = JSON.parse(myCache.get("latest-products"));
+      products = await JSON.parse(myCache.get("latest-products"));
     else {
       products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
-      myCache.set("latest-products", JSON.stringify(products));
+      await myCache.set("latest-products", JSON.stringify(products));
     }
 
     return res
