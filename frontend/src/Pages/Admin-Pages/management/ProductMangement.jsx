@@ -1,15 +1,29 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import AdminSideBar from  './../../../components/Admin-components/AdminSideBar'
+import { useSelector } from 'react-redux';
+import { useProductDetailsQuery } from '../../../redux/api/productApi';
+import { useParams } from 'react-router-dom';
+import { server } from '../../../redux/store';
 
-const img =
-  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
+
+
+// const img =
+//   "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
 
 
 function ProductMangement() {
-  const [name,setName] = useState("Puma Shoes")
-  const [price,setPrice] = useState(2000)
-  const [stock,setStock] = useState(10)
-  const [photo,setPhoto] = useState(img)
+
+  const {user} = useSelector((state)=>state.userReducer)
+
+const params = useParams()
+ 
+const {data} = useProductDetailsQuery(params.id)
+
+
+  const [name,setName] = useState("")
+  const [price,setPrice] = useState(0)
+  const [stock,setStock] = useState(0)
+  const [photo,setPhoto] = useState([])
 
   const [nameUpdate,setNameUpdate] = useState(name)
   const [priceUpdate,setPriceUpdate] = useState(price)
@@ -32,6 +46,20 @@ function ProductMangement() {
    
   }
   
+
+useEffect(()=>{
+  if(data?.data){
+    setNameUpdate(data?.data?.name)
+    setPriceUpdate(data?.data?.price)
+    setStockUpdate(data?.data?.stock)
+    setPhotoUpdate(data?.data?.photo)
+
+  }
+
+
+})
+
+
   const SubmitHandaler =(e)=>{
     e.preventDefault()
     setName(nameUpdate);
@@ -42,20 +70,24 @@ function ProductMangement() {
     
   }
   
+
+
+
+
   return (
     <div className='adminContainer'>
       <AdminSideBar />
       <main className='product-management'>
 <section>
-<strong>ID - asnmdkasndmsan</strong>
-          <img src={photo} alt="Product" />
-          <p>{name}</p>
-          {stock > 0 ? (
-            <span className="green">{stock} Available</span>
+<strong>{}</strong>
+          <img src={photoUpdate} alt="Product" />
+          <p>{nameUpdate}</p>
+          {stockUpdate > 0 ? (
+            <span className="green">{stockUpdate} Available</span>
           ) : (
             <span className="red">Not Available</span>
           )}
-          <h3>${price}</h3>
+          <h3>${priceUpdate}</h3>
       </section>
 <article>
 <form onSubmit={SubmitHandaler}>

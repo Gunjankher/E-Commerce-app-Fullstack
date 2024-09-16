@@ -43,9 +43,6 @@ console.log(`photo data`, data);
   data?.data.length > 0 ? (
     data?.data.map((i) => {
       const imageUrl = `${server}${i.photos?.[0].url}`;
-      
-      // Log the image URL to verify it's correct
-      console.log("Generated image URL:", imageUrl);
 
       return (
         <ProductCard

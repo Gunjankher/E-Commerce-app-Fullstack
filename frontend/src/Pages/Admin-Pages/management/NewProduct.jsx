@@ -99,25 +99,41 @@ onChange={(e)=>setName(e.target.value)}
 </div>
 <div>
   <label>price</label>
-<input 
-required
-type="number"
-placeholder = "price"
-value={price}
-min={0}
-onChange={(e)=>setPrice(Number(e.target.value))}
-/>
+  <input 
+  required
+  type="number"
+  placeholder="Number"
+  value={price}
+  min={0}
+  onChange={(e) => {
+    let inputValue = e.target.value;
+
+    // Remove leading 0 if it's not a decimal number
+    if (inputValue.startsWith("0") && inputValue.length > 1) {
+      inputValue = inputValue.slice(1); // Remove the leading 0
+    }
+
+    setPrice(inputValue);
+  }} />
 </div>
 <div>
   <label>Stock</label>
-<input 
-required
-type="number"
-placeholder ="Number"
-value={stock}
-min={0}
-onChange={(e)=>setStock(Number(e.target.value))}
-/>
+  <input 
+  required
+  type="number"
+  placeholder="Number"
+  value={stock}
+  min={0}
+  onChange={(e) => {
+    let inputValue = e.target.value;
+
+    // Remove leading 0 if it's not a decimal number
+    if (inputValue.startsWith("0") && inputValue.length > 1) {
+      inputValue = inputValue.slice(1); // Remove the leading 0
+    }
+
+    setStock(inputValue);
+  }} />
 </div>
 <div>
               <label>Category</label>
