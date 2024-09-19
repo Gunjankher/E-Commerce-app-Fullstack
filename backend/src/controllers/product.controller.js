@@ -376,58 +376,156 @@ const getSingleProduct = asyncHandler(async (req, res, next) => {
   }
 });
 
+// const updateProduct = asyncHandler(async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, price, stock, category, description } = req.body;
+//     const photos = req.file; // Adjusted to handle a single file
+
+//     const findProducts = await Product.findById(id);
+
+//     if (!findProducts) return next(new ApiError(404, "invalid  Product Id"));
+
+//     if (photos) {
+//       const photoObj = {
+//         public_id: photos.filename, // Assuming the filename is used as the public ID
+//         url: photos.path, // Assuming the path is used as the URL
+//       };
+
+//       if (findProducts.photos && findProducts.photos.url) {
+//         rm(findProducts.photos.url, (err) => {
+//           if (err) {
+//             console.error("Error deleting old photo:", err.message);
+//           } else {
+//             console.log("Old photo deleted");
+//           }
+//         });
+//       }
+
+//       findProducts.photos = photoObj;
+//     }
+
+//     if (name) findProducts.name = name;
+//     if (price) findProducts.price = price;
+//     if (stock) findProducts.stock = stock;
+//     if (category) findProducts.category = category;
+
+//     await findProducts.save();
+
+//     await invalidateCache({
+//       product: true,
+//       productId: String(Product._id),
+//       admin: true,
+//     });
+
+//     // Return the response
+//     return res
+//       .status(201)
+//       .json(new ApiResponse(201, findProducts, "Product Updated Successfully"));
+//   } catch (error) {
+//     // Log the error if product creation fails
+//     console.error("Error Updating product:", error.message);
+//     return next(new ApiError(401, error.message, "Cannot Update Product"));
+//   }
+// });
+
+
+
+
 const updateProduct = asyncHandler(async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, price, stock, category, description } = req.body;
-    const photos = req.file; // Adjusted to handle a single file
+    const { name, price, stock, category, description, photos } = req.body;
 
+    // Find the existing product
     const findProducts = await Product.findById(id);
 
-    if (!findProducts) return next(new ApiError(404, "invalid  Product Id"));
+    if (!findProducts) {
+      return next(new ApiError(404, "Invalid Product Id"));
+    }
 
+    // Handle base64 image
     if (photos) {
-      const photoObj = {
-        public_id: photos.filename, // Assuming the filename is used as the public ID
-        url: photos.path, // Assuming the path is used as the URL
-      };
+      const __dirname = dirname(fileURLToPath(import.meta.url));
 
+      // Remove base64 prefix and convert to buffer
+      const base64Data = photos.replace(/^data:image\/\w+;base64,/, "");
+      const imageBuffer = Buffer.from(base64Data, 'base64');
+
+      // Define unique image name and path
+      const imageName = `${Date.now()}-product.jpg`;
+      const imagePath = path.join(__dirname, '../../public/temp', imageName);
+
+      // Ensure directory exists
+      const dirPath = path.join(__dirname, '../../public/temp');
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
+
+      // Write new image file
+      fs.writeFile(imagePath, imageBuffer, (err) => {
+        if (err) {
+          console.error('Error saving new image:', err.message);
+          return next(new ApiError(500, 'Failed to save new image'));
+        }
+        console.log('New image saved successfully.');
+      });
+
+      // If old image exists, delete it
       if (findProducts.photos && findProducts.photos.url) {
-        rm(findProducts.photos.url, (err) => {
+        const oldImagePath = path.join(__dirname, `../../${findProducts.photos.url}`);
+        fs.unlink(oldImagePath, (err) => {
           if (err) {
-            console.error("Error deleting old photo:", err.message);
+            console.error('Error deleting old image:', err.message);
           } else {
-            console.log("Old photo deleted");
+            console.log('Old image deleted successfully.');
           }
         });
       }
 
-      findProducts.photos = photoObj;
+      // Update product's image with new photo details
+      findProducts.photos = {
+        public_id: imageName,
+        url: `/public/temp/${imageName}`
+      };
     }
 
+    // Update product fields
     if (name) findProducts.name = name;
     if (price) findProducts.price = price;
     if (stock) findProducts.stock = stock;
     if (category) findProducts.category = category;
+    if (description) findProducts.description = description;
 
+    // Save updated product
     await findProducts.save();
 
     await invalidateCache({
       product: true,
-      productId: String(product._id),
       admin: true,
+      // productId: String(Product._id),
+
     });
 
-    // Return the response
-    return res
-      .status(201)
-      .json(new ApiResponse(201, findProducts, "Product Updated Successfully"));
+    return res.status(200).json(new ApiResponse(200, findProducts, "Product Updated Successfully"));
   } catch (error) {
-    // Log the error if product creation fails
-    console.error("Error Updating product:", error.message);
-    return next(new ApiError(401, error.message, "Cannot Update Product"));
+    console.error("Error updating product:", error.message);
+    return next(new ApiError(500, error.message, "Failed to update product"));
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const deleteProduct = asyncHandler(async (req, res, next) => {
   try {
@@ -444,7 +542,7 @@ const deleteProduct = asyncHandler(async (req, res, next) => {
         }
       });
     }
-    await Product.deleteOne();
+    await product.deleteOne();
 
     await invalidateCache({
       product: true,

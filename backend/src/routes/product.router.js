@@ -16,7 +16,10 @@ router.route("/latest").get(getlatestProducts)
 router.route("/categories").get(getAllCategories)
 router.route("/all").get(getAllProducts)
 router.route("/admin-products").get(getAdminProducts)
-router.route("/:id").get(getSingleProduct).put(adminOnly,upload.single(),updateProduct).delete(adminOnly,deleteProduct)
+router.route("/:id")
+.get(getSingleProduct)
+.put(upload.single(),updateProduct)
+.delete(upload.none(),deleteProduct);
 
 // 2.33  76% 2.44 70
 

@@ -64,6 +64,7 @@ const Products = () => {
     }
   }, [data]);
   
+  console.log(`data`, data);
   
   
   

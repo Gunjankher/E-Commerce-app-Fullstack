@@ -1,22 +1,26 @@
-import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-
-
-
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const productAPI = createApi({
-    reducerPath :"productApi",
-    baseQuery :fetchBaseQuery({baseUrl :`${import.meta.env.VITE_SERVER}/api/v1/product/`}),
-    tagTypes :["product"],
-    endpoints :(builder)=>({
-     latestProduct : builder.query({query :()=> "latest",
-      providesTags : ["product"]
-     }),
-     allProducts : builder.query({query :(id)=> `admin-products?=${id}`,
-     providesTags : ["product"]}),
-     categories : builder.query({query :()=> `categories`,
-      providesTags : ["product"]
-     }),
-     SearchProducts : builder.query({query :({price,search,sort,category,page})=> {
+  reducerPath: "productApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${import.meta.env.VITE_SERVER}/api/v1/product/`,
+  }),
+  tagTypes: ["product"],
+  endpoints: (builder) => ({
+    latestProduct: builder.query({
+      query: () => "latest",
+      providesTags: ["product"],
+    }),
+    allProducts: builder.query({
+      query: (id) => `admin-products?=${id}`,
+      providesTags: ["product"],
+    }),
+    categories: builder.query({
+      query: () => `categories`,
+      providesTags: ["product"],
+    }),
+    SearchProducts: builder.query({
+      query: ({ price, search, sort, category, page }) => {
         let base = `all?search=${search}&page=${page}`;
 
         if (price) base += `&price=${price}`;
@@ -24,29 +28,52 @@ export const productAPI = createApi({
         if (category) base += `&category=${category}`;
 
         return base;
-     },
-     providesTags : ["product"]
-   }),
+      },
+      providesTags: ["product"],
+    }),
 
-   productDetails: builder.query({query :(id)=> id,
-      providesTags : ["product"]
-     }),
+    productDetails: builder.query({
+      query: (id) => id,
+      providesTags: ["product"],
+    }),
 
-     newProduct : builder.mutation({query :({formData,id})=> ({
-        url:`new?id=${id}`,
-        method : "Post",
-        'Content-Type': 'application/json',
-        body :formData,
-     }),
-   invalidatesTags : ['product']
-   }),
-  })
+    newProduct: builder.mutation({
+      query: ({ formData, id }) => ({
+        url: `new?id=${id}`,
+        method: "Post",
+        "Content-Type": "application/json",
+        body: formData,
+      }),
+      invalidatesTags: ["product"],
+    }),
 
-  })
-  
+    updateProduct: builder.mutation({
+      query: ({ formData, userId, productId }) => ({
+        url: `${productId}?id=${userId}`,
+        method: "PUT",
+        "Content-Type": "application/json",
+        body: formData,
+      }),
+      invalidatesTags: ["product"],
+    }),
+    deleteProduct: builder.mutation({
+      query: ({ userId, productId }) => ({
+        url: `${productId}?id=${userId}`,
+        method: "DELETE",
+        "Content-Type": "application/json",
+      }),
+      invalidatesTags: ["product"],
+    }),
+  }),
+});
 
-  export const {useLatestProductQuery,useAllProductsQuery,useCategoriesQuery,useSearchProductsQuery,useNewProductMutation,useProductDetailsQuery} = productAPI
-
-
-
-  
+export const {
+  useLatestProductQuery,
+  useAllProductsQuery,
+  useCategoriesQuery,
+  useSearchProductsQuery,
+  useNewProductMutation,
+  useProductDetailsQuery,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+} = productAPI;
