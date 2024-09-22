@@ -5,6 +5,8 @@ import { useLatestProductQuery } from '../redux/api/productApi'
 import toast from 'react-hot-toast'
 import Loader, { Skeleton } from '../components/Loader'
 import { server } from '../redux/store'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../redux/reducer/cartReducer'
 
 
 
@@ -12,13 +14,16 @@ const img = 'https://m.media-amazon.com/images/I/71jG+e7roXL._AC_UY218_.jpg'
 
 function Home () {
 
+  const dispatch = useDispatch()
+
 const {isLoading, error ,data} = useLatestProductQuery("")
 
 
-console.log(`photo data`, data);
 
 
-  const addToCartHandlar = ()=>{
+  const addToCartHandlar = (cartItem)=>{
+if(cartItem.stock<1)return toast.error("Out of Stock")
+  dispatch(addToCart(cartItem))
 
   }
 
