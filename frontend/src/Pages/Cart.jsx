@@ -2,30 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { VscError } from 'react-icons/vsc'
 import CartItem from '../components/CartItem'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 
 
-const cartItems = [
-{
-  prodcutId :"dgsdgfdg",
-name:"Macbook",
-price : 45000,
-stock : 50,
-Quantity : 4,
-photo : 'https://m.media-amazon.com/images/I/71jG+e7roXL._AC_UY218_.jpg'
-}
 
-
-]
-const subtotal = 4000
-const tax = Math.round(subtotal * 0.18)
-const shippingCharges = 200
-const Discount = 500
-const total = subtotal + tax + shippingCharges
 
 
 function Cart() {
 
+  const {cartItems,subtotal,tax,shippingCharges,Discount,total} = useSelector((state)=>state.cartReducer)
 
   const [couponCode, setCouponCode] = useState("")
   const [isValidcouponCode, setIsValidCouponCode] = useState(false)
@@ -50,7 +36,7 @@ return ()=>{
   return (
     <div className='cart'>
       <main>
-{ cartItems.length > 0 ?  cartItems.map((i,idx)=>(
+{ cartItems?.length > 0 ?  cartItems.map((i,idx)=>(
 <CartItem key={idx}  CartItem = {i}/>
   )
 
@@ -91,7 +77,7 @@ return ()=>{
 
 
        {
-        cartItems.length> 0 && <Link to="/shipping">Checkout</Link>
+        cartItems?.length> 0 && <Link to="/shipping">Checkout</Link>
        }
 
       </aside>
