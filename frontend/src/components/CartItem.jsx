@@ -2,7 +2,7 @@ import React from 'react'
 import { FaTrash } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
-function CartItem({CartItem}) {
+function CartItem({CartItem,incrementhandler,decrementHandler,removeHandler}) {
 
     // {
     //     prodcutId :"dgsdgfdg",
@@ -15,24 +15,24 @@ function CartItem({CartItem}) {
     //   }
 
 
-const {photo,prodcutId,name,price,quantity} = CartItem
+const {photo,productId,name,price,quantity} = CartItem
 
   return (
     <div className='cart-item'>
 
 <img src={photo} alt="" />
 <article>
-    <Link to={`/product/${prodcutId}`}></Link>
+    <Link to={`/product/${productId}`}></Link>
     <span>₹{price}</span>
 </article>
 
 <div>
-    <button>-</button>
+    <button onClick={()=> decrementHandler(CartItem)}>-</button>
 <p>{quantity}</p>
-    <button>+</button>
+    <button  onClick={()=> incrementhandler(CartItem)}>+</button>
 </div>
 
-<button>
+<button  onClick={()=> removeHandler(productId)}>
     <FaTrash />
 </button>
 

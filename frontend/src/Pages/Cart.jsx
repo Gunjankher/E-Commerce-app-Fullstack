@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { VscError } from 'react-icons/vsc'
-import CartItem from '../components/CartItem'
+import CartItemCard from '../components/CartItem'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { addToCart, removeCartItem } from '../redux/reducer/cartReducer'
+import toast from 'react-hot-toast'
+
 
 
 
@@ -18,6 +21,26 @@ function Cart() {
   const [couponCode, setCouponCode] = useState("")
   const [isValidcouponCode, setIsValidCouponCode] = useState(false)
   const dispatch = useDispatch()
+
+
+
+  const incrementhandler = (cartItem)=>{
+
+    if(cartItem.quantity >= cartItem.stock) return 
+      dispatch(addToCart({...cartItem, quantity: cartItem.quantity+1}))
+    
+      }
+  const decrementHandler = (cartItem)=>{
+    if(cartItem.quantity <= 1) return 
+      dispatch(addToCart({...cartItem, quantity: cartItem.quantity-1}))
+    
+      }
+  const removeHandler = (productId)=>{
+     dispatch(removeCartItem(productId))
+     toast.success("removed from cart")
+    
+      }
+
 
 
 useEffect(()=>{
@@ -40,7 +63,13 @@ return ()=>{
     <div className='cart'>
       <main>
 { cartItems?.length > 0 ?  cartItems.map((i,idx)=>(
-<CartItem key={idx}  CartItem = {i}/>
+<CartItemCard
+ key={idx}
+   CartItem = {i}
+   incrementhandler={incrementhandler}
+   decrementHandler={decrementHandler}
+   removeHandler={removeHandler}
+   />
   )
   
 ) :(<h1>No Items Added</h1>)

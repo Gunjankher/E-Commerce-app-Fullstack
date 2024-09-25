@@ -24,6 +24,7 @@ const {isLoading, error ,data} = useLatestProductQuery("")
   const addToCartHandlar = (cartItem)=>{
 if(cartItem.stock<1)return toast.error("Out of Stock")
   dispatch(addToCart(cartItem))
+toast.success("added to cart")
 
   }
 

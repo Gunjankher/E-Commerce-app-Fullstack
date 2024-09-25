@@ -41,6 +41,20 @@ removeCartItem :(state,action)=>{
     state.loading = false;
     },
 
+    calculatePrice: (state) => {
+        const subtotal = state.cartItems.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+        );
+  
+        state.subtotal = subtotal;
+        state.shippingCharges = state.subtotal > 1000 ? 0 : 200;
+        state.tax = Math.round(state.subtotal * 0.18);
+        state.total =
+          state.subtotal + state.tax + state.shippingCharges - state.discount;
+      },
+
+
 
     }
 })
