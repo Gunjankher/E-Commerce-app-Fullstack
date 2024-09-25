@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { VscError } from 'react-icons/vsc'
 import CartItem from '../components/CartItem'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 
@@ -11,10 +11,13 @@ import { useSelector } from 'react-redux'
 
 function Cart() {
 
+
+
   const {cartItems,subtotal,tax,shippingCharges,Discount,total} = useSelector((state)=>state.cartReducer)
 
   const [couponCode, setCouponCode] = useState("")
   const [isValidcouponCode, setIsValidCouponCode] = useState(false)
+  const dispatch = useDispatch()
 
 
 useEffect(()=>{
@@ -39,8 +42,8 @@ return ()=>{
 { cartItems?.length > 0 ?  cartItems.map((i,idx)=>(
 <CartItem key={idx}  CartItem = {i}/>
   )
-
-  ) :<h1>No Items Added</h1>
+  
+) :(<h1>No Items Added</h1>)
 }
 
       </main>
@@ -49,7 +52,7 @@ return ()=>{
         <p>Shipping Charges : ₹{shippingCharges}</p>
         <p>Tax : ₹{tax}</p>
         <p>
-          Discount : <em> - ₹{Discount} </em>
+          Discount : <em className='red'> - ₹{Discount} </em>
         
             <b>
               Total : {total}

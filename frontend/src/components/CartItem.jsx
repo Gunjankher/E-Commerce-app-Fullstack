@@ -15,7 +15,7 @@ function CartItem({CartItem}) {
     //   }
 
 
-const {photo,prodcutId,name,price,Quantity} = CartItem
+const {photo,prodcutId,name,price,quantity} = CartItem
 
   return (
     <div className='cart-item'>
@@ -28,7 +28,7 @@ const {photo,prodcutId,name,price,Quantity} = CartItem
 
 <div>
     <button>-</button>
-<p>{Quantity}</p>
+<p>{quantity}</p>
     <button>+</button>
 </div>
 

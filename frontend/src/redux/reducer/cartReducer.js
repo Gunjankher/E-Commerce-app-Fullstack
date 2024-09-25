@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
 loading:false,
-CartItems :[],
+cartItems :[],
 subtotal :0,
 tax :0,
 shippingCharges:0,
@@ -25,13 +25,19 @@ shippingInfo:{
     reducers:{
 addToCart :(state,action)=>{
 state.loading = true
-state.CartItems.push(action.payload)
+const index = state.cartItems.findIndex((i)=> i.productId === action.payload.productId)
+if(index !== -1) state.cartItems[index] = action.payload
+else{
+
+state.cartItems.push(action.payload)
 state.loading = false
+}
+    
 },
 
 removeCartItem :(state,action)=>{
     state.loading = true
-    state.CartItems= state.CartItems.filter((i)=> i.productId !== action.payload)
+    state.cartItems= state.cartItems.filter((i)=> i.productId !== action.payload)
     state.loading = false;
     },
 
