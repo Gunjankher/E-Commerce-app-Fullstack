@@ -59,5 +59,5 @@ removeCartItem :(state,action)=>{
     }
 })
 
-export const {addToCart,removeCartItem} = cartReducer.actions
+export const {addToCart,removeCartItem,calculatePrice} = cartReducer.actions
 
