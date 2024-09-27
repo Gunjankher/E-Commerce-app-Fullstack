@@ -39,25 +39,46 @@ removeCartItem :(state,action)=>{
     state.loading = true
     state.cartItems= state.cartItems.filter((i)=> i.productId !== action.payload)
     state.loading = false;
+
+    if (state.cartItems.length === 0) {
+      state.subtotal = 0;
+      state.tax = 0;
+      state.shippingCharges = 0;
+      state.discount = 0;
+      state.total = 0;
+    }
     },
 
     calculatePrice: (state) => {
-        const subtotal = state.cartItems.reduce(
+      const subtotal = state.cartItems.reduce(
           (total, item) => total + item.price * item.quantity,
           0
-        );
+      );
   
-        state.subtotal = subtotal;
-        state.shippingCharges = state.subtotal > 1000 ? 0 : 200;
-        state.tax = Math.round(state.subtotal * 0.18);
-        state.total =
-          state.subtotal + state.tax + state.shippingCharges - state.discount;
-      },
+      state.subtotal = subtotal;
+      state.shippingCharges = state.subtotal > 1000 ? 0 : 200;
+      state.tax = Math.round(state.subtotal * 0.18);
+      
+
+      // console.log('Subtotal:', state.subtotal);
+      // console.log('Tax:', state.tax);
+      // console.log('Shipping Charges:', state.shippingCharges);
+      // console.log('Discount:', state.discount);
 
 
+      // Ensure discount is a valid number
+      const discountValue = typeof state.discount === 'number' ? state.discount : 0;
+      state.total = subtotal + state.tax + state.shippingCharges - discountValue;
+  },
+  
+  discountApplied: (state, action) => {
+ state.discount = action.payload
 
+      
+  }
+  
     }
 })
 
-export const {addToCart,removeCartItem,calculatePrice} = cartReducer.actions
+export const {addToCart,removeCartItem,calculatePrice,discountApplied} = cartReducer.actions
 

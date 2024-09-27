@@ -4,7 +4,10 @@ import { VscError } from 'react-icons/vsc'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import CartItemCard from '../components/CartItem'
-import { addToCart, calculatePrice, removeCartItem } from '../redux/reducer/cartReducer'
+import { addToCart, calculatePrice, discountApplied, removeCartItem } from '../redux/reducer/cartReducer'
+import axios from 'axios'
+import { server } from '../redux/store'
+
 
 
 
@@ -16,7 +19,9 @@ function Cart() {
 
 
 
-  const { cartItems, subtotal, tax, shippingCharges, discount, total } = useSelector((state) => state.cartReducer)
+  const {cartItems,subtotal,tax,shippingCharges,discount,total } = useSelector((state) => state.cartReducer)
+  console.log(`discount ffdfdw`,discount);
+  
 
   const [couponCode, setCouponCode] = useState("")
   const [isValidcouponCode, setIsValidCouponCode] = useState(false)
@@ -42,16 +47,39 @@ function Cart() {
   }
 
 
-
   useEffect(() => {
+const {token:cancelToken, cancel} = axios.CancelToken.source()
+
     const timeOutId = setTimeout(() => {
-      if (Math.random() > 0.5) setIsValidCouponCode(true)
-      else setIsValidCouponCode(false)
-    }, 1000);
+
+
+axios.get(`${server}/api/v1/payment/discount?coupon=${couponCode}`,{cancelToken})
+    .then((res) => {
+        console.log('Discount response:', res.data); // Ensure this is correct
+        if (res.data.statusCode) {
+            const discount = res.data.data.discount; // Make sure to get the discount correctly
+            dispatch(discountApplied(discount)); // Apply discount
+            setIsValidCouponCode(true);
+        } else {
+            // Handle error case here
+            console.error('Invalid coupon');
+            dispatch(discountApplied(0)); // Reset discount if invalid
+            setIsValidCouponCode(false);
+        }
+        dispatch(calculatePrice()); // Recalculate price after discount
+    })
+    .catch((error) => {
+        console.error('Error applying discount:', error);
+        dispatch(discountApplied(0)); // Reset discount on error
+        setIsValidCouponCode(false);
+        dispatch(calculatePrice()); // Recalculate price without discount
+    }); }, 1000);
+
 
     return () => {
 
       clearTimeout(timeOutId)
+      cancel()
       setIsValidCouponCode(false)
     }
 
@@ -87,9 +115,10 @@ function Cart() {
         <p>Tax : ₹{tax}</p>
         <p>
           Discount : <em className='red'> - ₹{discount} </em>
-          <b>
+          <br/>
+       <br/>
             Total : {total}
-          </b>
+        
 
         </p>
 

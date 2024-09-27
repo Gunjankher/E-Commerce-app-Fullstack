@@ -1,12 +1,11 @@
 import React from 'react'
+import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import { useLatestProductQuery } from '../redux/api/productApi'
-import toast from 'react-hot-toast'
-import Loader, { Skeleton } from '../components/Loader'
-import { server } from '../redux/store'
-import { useDispatch } from 'react-redux'
 import { addToCart } from '../redux/reducer/cartReducer'
+import { server } from '../redux/store'
 
 
 
@@ -21,9 +20,9 @@ const {isLoading, error ,data} = useLatestProductQuery("")
 
 
 
-  const addToCartHandlar = (cartItem)=>{
-if(cartItem.stock<1)return toast.error("Out of Stock")
-  dispatch(addToCart(cartItem))
+  const addToCartHandlar = (cartItems)=>{
+if(cartItems.stock<1)return toast.error("Out of Stock")
+  dispatch(addToCart(cartItems))
 toast.success("added to cart")
 
   }
