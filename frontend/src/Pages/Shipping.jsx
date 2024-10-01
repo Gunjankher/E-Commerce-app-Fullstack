@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from 'react'
 import { BiArrowBack } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 
+
 function Shipping() {
+
+  const {cartItems} = useSelector((state) => state.cartReducer)
 
 const navigate = useNavigate()
 
@@ -26,6 +30,10 @@ const submitHandler = ()=>{
 
 }
       
+useEffect(()=>{
+  if(cartItems.length <=0) return navigate("/cart")
+},[cartItems])
+
 
   return (
     <div className="shipping">

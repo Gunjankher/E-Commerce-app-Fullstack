@@ -3,6 +3,8 @@ import { productAPI } from './api/productApi'
 import { userAPI } from './api/userApi'
 import { userReducer } from './reducer/userReducer'
 import { cartReducer } from './reducer/cartReducer'
+import { orderAPI } from './api/orderApi'
+
 
 
 
@@ -14,9 +16,10 @@ export const store = configureStore({
     reducer :{
     [userAPI.reducerPath] : userAPI.reducer,
     [productAPI.reducerPath] : productAPI.reducer,
+    [orderAPI.reducerPath] : orderAPI.reducer,
     [userReducer.name] :userReducer.reducer,
     [cartReducer.name] :cartReducer.reducer
     },
-    middleware :(mid)=>[...mid(),userAPI.middleware,productAPI.middleware]
+    middleware :(mid)=>[...mid(),userAPI.middleware,productAPI.middleware,orderAPI.middleware]
 })
 

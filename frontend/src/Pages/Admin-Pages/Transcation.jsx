@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 
-import AdminSideBar from './../../components/Admin-components/AdminSideBar'
-import { Column } from "react-table";
-import { ReactElement, useState, useCallback } from "react";
-import TableHOC from "../../components/Admin-components/TableHOC";
+import { useCallback, useState } from "react";
+import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
-
+import TableHOC from "../../components/Admin-components/TableHOC";
+import { useAllOrdersQuery } from '../../redux/api/orderApi';
+import AdminSideBar from './../../components/Admin-components/AdminSideBar';
 
 const columns = [
   {
@@ -34,32 +34,6 @@ const columns = [
   },
 ];
 
-const arr = [
-  {
-    user: "Charas",
-    amount: 4500,
-    discount: 400,
-    quantity: 3,
-    status: <span className="red">Processing</span>,
-    action: <Link to="/admin/transaction/sajknaskd">Manage</Link>,
-  },
-  {
-    user: "Xavirors",
-    amount: 6999,
-    discount: 400,
-    status: <span className="green">Shipped</span>,
-    quantity: 6,
-    action: <Link to="/admin/transaction/sajknaskd">Manage</Link>,
-  },
-  {
-    user: "Xavirors",
-    amount: 6999,
-    discount: 400,
-    status: <span className="purple">Delivered</span>,
-    quantity: 6,
-    action: <Link to="/admin/transaction/sajknaskd">Manage</Link>,
-  },
-];
 
 
 
@@ -67,13 +41,51 @@ const arr = [
 
 function Transcation() {
 
-const [data] = useState(arr)
+  const {user}= useSelector((state)=> state.userReducer)
+  const {isLoading,data,isError} = useAllOrdersQuery(user?._id)
+  console.log(`transction data`, data);
+  const [rows,setRows] = useState([]);
+
+
+useEffect(() => {
+  if (data?.data && data?.data.length > 0) {
+    setRows(
+      data?.data?.map((i) => ({
+    user :i.user,
+    amount :i.total,
+    discount : i.discount,
+    quantity :i.orderItems.length,
+    status: (
+      <span
+        className={
+          i.status === "Processing"
+            ? "red"
+            : i.status === "Shipped"
+            ? "green"
+            : "purple"
+        }
+      >
+        {i.status}
+      </span>
+    ),
+    action: <Link to={`/admin/transaction/${i._id}`}>Manage</Link>,
+      
+      })),
+    )
+  } else {
+   console.log(`fk yaar`);
+   
+  }
+}, [data]);
+
+
+
 
 
 const Table = useCallback(
 TableHOC(
 columns,
-data,
+rows,
 "dashboard-product-box", 
 "Transcation",
  true

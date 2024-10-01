@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
 import AdminSideBar from  './../../../components/Admin-components/AdminSideBar'
-import { Link } from 'react-router-dom';
-const img =
-  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { FaTrash } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import { useOrderDetailsQuery } from '../../../redux/api/orderApi';
 
-  const orderItems = [
-    {
-      name: "Puma Shoes",
-      photo: img,
-      _id: "asdsaasdas",
-      quantity: 4,
-      price: 2000,
-    },
-  ];
+
+
+  
+  const orderItems = []
 
 function TransactionManagement() {
+  const params = useParams()
+  const navigate = useNavigate()
+
+  const {user}= useSelector((state)=> state.userReducer)
+  const {isLoading,data,isError} = useOrderDetailsQuery(params.id)
+
 
 const [order,setOrder] = useState({
   name: "Abhishek Singh",
@@ -51,14 +53,18 @@ const {
 } = order;
 
 
+
+
 const updateHandler = () => {
-  setOrder((prev) => ({
-    ...prev,
-    status: prev.status === "Processing" ? "Shipped" : "Delivered",
-  }));
+ 
 };
 
+const deleteHandler =()=>{
 
+}
+
+
+if(isError) return <Navigate to={"/404"}/>
 
   return (
     <div className='adminContainer'>
@@ -80,6 +86,9 @@ const updateHandler = () => {
 </section>
 
 <article className='shipping-info-card'>
+  <button className='product-delete-btn' onClick={deleteHandler}>
+    <FaTrash />
+  </button>
 
 <h1>Order Info</h1>
 <p>User Info</p>

@@ -40,7 +40,8 @@ const Products = () => {
   
   const [rows,setRows] = useState([]);
   const {user} = useSelector((state)=>state.userReducer)
-  const {data, isError,} = useAllProductsQuery(user?._id)
+  const {data, isError,isLoading} = useAllProductsQuery(user?._id)
+   
   
   if (isError) {
     toast.error('Some error occured')
@@ -63,8 +64,7 @@ const Products = () => {
      
     }
   }, [data]);
-  
-  console.log(`data`, data);
+
   
   
   

@@ -11,10 +11,10 @@ const router = Router()
 
 router.route("/new").post(newOrder)
 router.route("/my").get(myOrders)
-router.route ("/all").get(adminOnly,allOrders)
+router.route ("/all").get(allOrders)
 router.route("/:id").get(getSingleOrder)
-.put(adminOnly,processOrder)
-.delete(adminOnly,deleteOrder)
+.put(processOrder)
+.delete(deleteOrder)
 
 
 // 2.33  76% 2.44 70
