@@ -1,14 +1,35 @@
-import React, { useState } from 'react'
-import AdminSideBar from  './../../../components/Admin-components/AdminSideBar'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
-import { useOrderDetailsQuery } from '../../../redux/api/orderApi';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useDeleteOrderMutation, useOrderDetailsQuery, useUpdateOrderMutation } from '../../../redux/api/orderApi';
+import AdminSideBar from './../../../components/Admin-components/AdminSideBar';
+import { server } from '../../../redux/store';
+import {responseToast} from '../../../utilis/feature'
 
 
 
-  
   const orderItems = []
+  const defaultData = {
+    shippingInfo :
+    {
+      name: "",
+  address: "",
+  city: "",
+  state: "",
+  country: "",
+  pincode: 0, 
+  },
+  status: "",
+  subtotal: 0,
+  discount:0 ,
+  shippingCharges: 0,
+  tax: 0,
+  total: 0,
+  orderItems : [],
+  user :{name :"", _id :"",  },
+  _id :""
+  }
 
 function TransactionManagement() {
   const params = useParams()
@@ -17,51 +38,41 @@ function TransactionManagement() {
   const {user}= useSelector((state)=> state.userReducer)
   const {isLoading,data,isError} = useOrderDetailsQuery(params.id)
 
-
-const [order,setOrder] = useState({
-  name: "Abhishek Singh",
-  address: "77 Black Street",
-  city: "Neyword",
-  state: "Nevada",
-  country: "India",
-  pinCode: 2434341,
-  status: "Processing",
-  subtotal: 4000,
-  discount: 1200,
-  shippingCharges: 0,
-  tax: 200,
-  total: 4000 + 200 + 0 - 1200,
-  orderItems,
-  _id: "asdnasjdhbn",
-
-})  
+console.log(data);
 
 
 const {
-  name,
-  address,
-  city,
-  country,
-  state,
-  pinCode,
-  subtotal,
+  shippingInfo :{address,city,state,country,pincode,},
+   orderItems,
+  //  user:{name},
+   status,
+   tax,
+   subtotal,
+   total,
+   discount,
   shippingCharges,
-  tax,
-  discount,
-  total,
-  status,
-} = order;
+  } = data?.data|| defaultData
 
+  const [updateOrder] = useUpdateOrderMutation();
+  const [deleteOrder] = useDeleteOrderMutation();
 
+  const [order, setOrder] = useState({});
 
+  const updateHandler = async () => {
+    const res = await updateOrder({
+      userId: user?._id,
+      orderId: data?.data?._id,
+    });
+    responseToast(res, navigate, "/admin/transaction");
+  };
 
-const updateHandler = () => {
- 
-};
-
-const deleteHandler =()=>{
-
-}
+  const deleteHandler = async () => {
+    const res = await deleteOrder({
+      userId: user?._id,
+      orderId: data?.data?._id,
+    });
+    responseToast(res, navigate, "/admin/transaction");
+  };
 
 
 if(isError) return <Navigate to={"/404"}/>
@@ -75,6 +86,7 @@ if(isError) return <Navigate to={"/404"}/>
   {
     orderItems.map((i)=>(
       <ProductCard
+      key={i.name}
       name={i.name}
       photo={i.photo}
       _id={i._id}
@@ -94,7 +106,7 @@ if(isError) return <Navigate to={"/404"}/>
 <p>User Info</p>
 <p>name :{name}</p>
 <p>
-            Address: {`${address}, ${city}, ${state}, ${country} ${pinCode}`}
+            Address: {`${address} ${city} ${state} ${country} ${pincode}`}
           </p>
           <h5>Amount Info</h5>
           <p>Subtotal: {subtotal}</p>
@@ -132,7 +144,7 @@ if(isError) return <Navigate to={"/404"}/>
 
 const ProductCard = ({ name, photo, price, quantity, _id }) => (
   <div className="transaction-product-card">
-    <img src={photo} alt={name} />
+  <img src={`${server}${photo[0]?.url}`} />
     <Link to={`/product/${_id}`}>{name}</Link>
     <span>
       ${price} X {quantity} = ${price * quantity}

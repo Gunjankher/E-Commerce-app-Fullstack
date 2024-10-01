@@ -20,17 +20,17 @@ export const orderAPI = createApi({
 
 
     updateOrder: builder.mutation({
-      query: (userId, orderId) => ({
-        url: `${orderId}?id=${userId}`,
+      query: ({ userId, orderId }) => ({
+        url: `${orderId}?id=${userId}`, // Fix: Use destructured object
         method: "PUT",
       }),
       invalidatesTags: ["orders"],
     }),
 
-
+    // Delete an order (userId and orderId should be destructured)
     deleteOrder: builder.mutation({
-      query: (userId, orderId) => ({
-        url: `${orderId}?id=${userId}`,
+      query: ({ userId, orderId }) => ({
+        url: `${orderId}?id=${userId}`, // Fix: Use destructured object
         method: "DELETE",
       }),
       invalidatesTags: ["orders"],
