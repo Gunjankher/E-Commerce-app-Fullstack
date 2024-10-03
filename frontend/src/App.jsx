@@ -29,6 +29,7 @@ const Coupon = lazy(() => import('./Pages/Admin-Pages/apps/Coupon.jsx'));
 const StopWatch = lazy(() => import('./Pages/Admin-Pages/apps/StopWatch'));
 const Toss = lazy(() => import('./Pages/Admin-Pages/apps/Toss'));
 
+
 // User Pages
 const Home = lazy(() => import('./Pages/Home.jsx'));
 const Cart = lazy(() => import('./Pages/Cart.jsx'));
@@ -36,6 +37,7 @@ const Search = lazy(() => import('./Pages/Search.jsx'));
 const Shipping = lazy(() => import('./Pages/Shipping.jsx'));
 const Login = lazy(() => import('./Pages/Login.jsx'));
 const Orders = lazy(() => import('./Pages/Orders.jsx'));
+const Checkout = lazy(() => import('./Pages/Checkout.jsx'));
 
 
 
@@ -88,8 +90,8 @@ function App() {
             >
               <Route path="/shipping" element={<Shipping />} />
               <Route path="/orders" element={<Orders />} />
-              {/* <Route path="/order/:id" element={<OrderDetails />} />
-              <Route path="/pay" element={<Checkout />} /> */}
+              {/* <Route path="/order/:id" element={<OrderDetails />} /> */}
+              <Route path="/pay" element={<Checkout />} />
             </Route>
             <Route
               element={

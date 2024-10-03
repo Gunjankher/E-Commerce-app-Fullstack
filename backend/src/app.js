@@ -7,15 +7,44 @@ import stripe from 'stripe'
 import path, { dirname } from 'path'
 import fs from 'fs'
 import {fileURLToPath} from 'url'
+import helmet from 'helmet'
 
 
 const app = express()
 
 
 app.use(cors({
-    origin : process.env.CORS_ORIGIN,
-    credentials : true
-}))
+  origin: process.env.CORS_ORIGIN, // Ensure this matches the frontend origin
+  credentials: true,
+}));
+
+
+app.use(express.json())
+app.use(express.urlencoded({extended: true ,limit : "16kb"}))
+
+
+// Your existing middleware setup
+if (process.env.NODE_ENV === 'production') {
+  app.use(
+      helmet.contentSecurityPolicy({
+          directives: {
+              defaultSrc: ["'self'"],
+              scriptSrc: [
+                  "'self'", 
+                  "'unsafe-inline'", 
+                  "'unsafe-eval'", 
+                  'blob:', 
+                  'https://js.stripe.com'
+              ],
+              // Add more directives as needed
+          },
+      })
+  );
+}
+
+
+
+
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -27,8 +56,8 @@ export const newStripe = new stripe(stripeKey)
 export const myCache = new NodeCache()
 
 
-app.use(express.json())
-app.use(express.urlencoded({extended: true ,limit : "16kb"}))
+
+
 app.use(express.static("public"))
 app.use(cookieParser())
 app.use(morgan("dev"))

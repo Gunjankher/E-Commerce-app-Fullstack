@@ -72,13 +72,20 @@ removeCartItem :(state,action)=>{
   },
   
   discountApplied: (state, action) => {
- state.discount = action.payload
+ state.discount = action.payload  
+  },
 
-      
-  }
-  
-    }
+  saveCoupon: (state, action) => {
+    state.coupon = action.payload;
+  },
+  saveShippingInfo: (state, action) => {
+    state.shippingInfo = action.payload;
+  },
+  resetCart: () => initialState,
+},
+
+   
 })
 
-export const {addToCart,removeCartItem,calculatePrice,discountApplied} = cartReducer.actions
+export const {addToCart,removeCartItem,calculatePrice,discountApplied,saveShippingInfo,resetCart} = cartReducer.actions
 

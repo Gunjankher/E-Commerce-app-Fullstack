@@ -11,13 +11,15 @@ const createPaymentIntent = asyncHandler(async (req, res, next) => {
   try {
     const { amount } = req.body;
 
-    if (!amount) {
-      return next(new ApiError(400, "Please enter amount"));
-    }
+     if (!amount || isNaN(amount)) {
+    return next(new ApiError(400, "Please enter a valid amount"));
+  }
 
     const paymentIntent = await newStripe.paymentIntents.create({
       amount: Number(amount) * 100,
-      currency: "inr",
+      // currency: "inr",
+      // amount: amount, // Amount in cents, for example 1000 for $10
+      currency: "inr"
     });
 
     return res.status(201).json(new ApiResponse(201, { clientSecret: paymentIntent.client_secret }, "Payment Intent created successfully"));
@@ -26,6 +28,44 @@ const createPaymentIntent = asyncHandler(async (req, res, next) => {
     return next(new ApiError(500, error.message, "Cannot create payment intent"));
   }
 });
+
+
+
+// const createPaymentIntent = asyncHandler(async (req, res, next) => {
+//   try {
+//     const { amount } = req.body;
+
+//     // Validate amount
+//     if (!amount || isNaN(amount)) {
+//       return next(new ApiError(400, "Please enter a valid amount"));
+//     }
+
+//     // Create a new PaymentIntent
+//     const paymentIntent = await newStripe.paymentIntents.create({
+//       amount: Number(amount) * 100, // Convert to cents
+//       currency: "inr",
+//     });
+
+//     // Check the status of the PaymentIntent
+//     if (paymentIntent.status === 'requires_confirmation') {
+//       // If it's in the requires_confirmation state, confirm it
+//       const confirmedPaymentIntent = await newStripe.paymentIntents.confirm(paymentIntent.id);
+//       return res.status(201).json(new ApiResponse(201, { clientSecret: confirmedPaymentIntent.client_secret }, "Payment Intent confirmed successfully"));
+//     } else if (paymentIntent.status === 'succeeded') {
+//       // If it has already succeeded, return the client secret without confirming again
+//       return res.status(200).json(new ApiResponse(200, { clientSecret: paymentIntent.client_secret }, "Payment Intent has already succeeded"));
+//     } else {
+//       // Handle other possible states if necessary
+//       return next(new ApiError(400, "Payment Intent is not in a valid state for confirmation"));
+//     }
+
+//   } catch (error) {
+//     console.error("Error creating payment intent:", error.message);
+//     return next(new ApiError(500, error.message, "Cannot create payment intent"));
+//   }
+// });
+
+
 
 
 const newCoupon = asyncHandler(async (req, res, next) => {
