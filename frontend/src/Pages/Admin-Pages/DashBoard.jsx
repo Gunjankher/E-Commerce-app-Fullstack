@@ -1,21 +1,36 @@
+ 
 import React from 'react'
-
-
-import AdminSideBar from './../../components/Admin-components/AdminSideBar'
+import CategoryItem from "../../components/Admin-components/CategoryItem"
+import { BarChart, DoughnutChart } from "../../components/Admin-components/Chart"
+import DashBoardTable from "../../components/Admin-components/DashBoardTable"
 import Input from "../../components/Admin-components/Input"
 import Widget from "../../components/Admin-components/Widget"
-import CategoryItem from "../../components/Admin-components/CategoryItem"
-import data from '../../assets/data.json'
-import { BarChart,DoughnutChart } from "../../components/Admin-components/Chart"
-import DashBoardTable from "../../components/Admin-components/DashBoardTable"
-
-import userImg from "../../assets/profile.jpg"
-import { FaRegBell } from "react-icons/fa"
-import { BsSearch } from "react-icons/bs"
+import AdminSideBar from './../../components/Admin-components/AdminSideBar'
 import { BiMaleFemale } from "react-icons/bi"
+import { BsSearch } from "react-icons/bs"
+import { FaRegBell } from "react-icons/fa"
+import { useSelector } from 'react-redux'
+import { useStatsQuery } from '../../redux/api/dashBoardApi'
+import { Navigate } from 'react-router-dom'
+import {getLastMonths} from '../../utilis/feature'
+
+
+
+
+const userImg = "img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"
+const { last6Months:months } = getLastMonths();
 
 function DashBoard() {
-  const userImg = "img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg"
+
+  const { user } = useSelector((state) => state.userReducer);
+
+  const { isLoading, data, isError } = useStatsQuery(user?._id);
+
+
+const stats = data?.data
+console.log(`stats`, stats);
+console.log(`stats transction`, stats?.chart?.transactions);
+
 
   return (
     <div className='adminContainer'>
@@ -29,8 +44,8 @@ function DashBoard() {
             type="text"
             placeholder="Search for data,users,docs"
           />
-          <img src={userImg} alt="" />
           <FaRegBell />
+          <img src={user?.photo || userImg} alt="User" />
 
         </div>
 
@@ -39,34 +54,31 @@ function DashBoard() {
 
           <Widget
             heading="Revenue"
-            value={1000000}
-            percent={30}
-            color="blue"
-            amount={500}
+            value={stats?.count?.revenue}
+            percent={stats?.ChangePercent?.revenue}
+            color="rgb(0, 115, 255)"
+            amount={true}
 
           />
           <Widget
-            heading="Revenue"
-            value={1000}
-            percent={-30}
-            color="aquamarine"
-            amount={false}
+           percent={stats?.ChangePercent?.user}
+           value={stats?.count?.user}
+           color="rgb(0 198 202)"
+           heading="Users"
 
           />
           <Widget
-            heading="Revenue"
-            value={1000}
-            percent={30}
-            color="orange"
-          //  amount={500}
+            percent={stats?.ChangePercent?.order}
+            value={stats?.count?.order}
+            color="rgb(255 196 0)"
+            heading="Transactions"
 
           />
           <Widget
-            heading="Revenue"
-            value={100000}
-            percent={30}
-            color="purple"
-          //  amount={500}
+            percent={stats?.ChangePercent?.product}
+            value={stats?.count?.product}
+            color="rgb(76 0 255)"
+            heading="Products"
 
           />
 
@@ -79,8 +91,9 @@ function DashBoard() {
           <div className="revenue-chart">
             <h2>Revenue & Transaction</h2>
             <BarChart
-              data_1={[300, 144, 433, 655, 237, 755, 190]}
-              data_2={[200, 444, 553, 675, 127, 345, 490]}
+               labels={months}
+               data_1={stats?.chart?.revenue}
+               data_2={stats?.chart?.order}
               title_1='revenue'
               title_2='Transaction'
               bgColor_1='rgb(0,115,255)'
@@ -99,14 +112,17 @@ function DashBoard() {
           <div className="dashboard-categories">
             <h2>Inventory</h2>
             <div>
-              {data.categories.map((i) => (
-                <CategoryItem
-                  key={i.heading}
-                  heading={i.heading}
-                  value={i.value}
-                  color={`hsl(${i.value * 4},${i.value}%,50%)`}
-                />
-              ))}
+            {stats?.categoryCount?.map((i) => {
+                    const [heading, value] = Object.entries(i)[0];
+                    return (
+                      <CategoryItem
+                        key={heading}
+                        value={value}
+                        heading={heading}
+                        color={`hsl(${value * 4}, ${value}%, 50%)`}
+                      />
+                    );
+                  })}
             </div>
           </div>
 
@@ -117,25 +133,26 @@ function DashBoard() {
 
 
         <section className='transation-container'>
-
-          <div className="gender-chart">
-            <h2>Gender Ratio</h2>
-            {/* chart */}
-            <DoughnutChart 
-            labels={['female,male']}
-            data={[12,19]}
-            backgroundColor={['hsl(340,82%,56%)','rgba(53,162,235,0.8)']}
-            cutout={90}
-            />
-<p>
-  <BiMaleFemale/>
-   </p>
-          </div>
-
+        <div className="gender-chart">
+                <h2>Gender Ratio</h2>
+                <DoughnutChart
+                  labels={["Female","Male"]}
+                  data={[stats?.chart?.userRatio?.female, stats?.Chart?.userRatio?.male]}
+                  backgroundColor={[
+                    "hsl(340, 82%, 56%)",
+                    "rgba(25, 162, 235, 0.8)",
+                  ]}
+                  cutout={90}
+                />
+              </div>
+                <p>
+                  <BiMaleFemale />
+                </p>
+        
           {/* Table */}
-          <DashBoardTable data={data.transaction}  />
-
-
+          {stats?.chart?.transactions && (
+  <DashBoardTable data={stats?.chart?.transactions}  />
+)}
 
 
 

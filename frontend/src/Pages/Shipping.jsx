@@ -16,6 +16,8 @@ function Shipping() {
 
 const navigate = useNavigate()
 const dispatch = useDispatch()
+const {user} = useSelector((state=> state.userReducer))
+
 
 
     const [shippingInfo, setShippingInfo] = useState({

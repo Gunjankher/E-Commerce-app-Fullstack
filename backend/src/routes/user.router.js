@@ -8,8 +8,8 @@ const  router = Router()
 
 
 router.route("/new").post(newUser)
-router.route("/all").get(adminOnly,getAllUsers)
-router.route("/:id").get(adminOnly,getUser)
-router.route("/:id").delete(adminOnly,deleteUser)
+router.route("/all").get(getAllUsers)
+router.route("/:id").get(getUser)
+router.route("/:id").delete(deleteUser)
 
 export default router 

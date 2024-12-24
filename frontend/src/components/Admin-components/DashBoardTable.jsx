@@ -4,7 +4,7 @@ import { Column } from "react-table";
 const columns = [
   {
     Header: "Id",
-    accessor: "id",
+    accessor: "_id",
   },
   {
     Header: "Quantity",
@@ -24,7 +24,7 @@ const columns = [
   },
 ];
 
-const DashBoardTable = ({ data = [] }) => {
+const DashBoardTable = ({ data = [], }) => {
   return TableHOC(
     columns,
     data,

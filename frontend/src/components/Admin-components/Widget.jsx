@@ -6,7 +6,7 @@ export default function Widget({ heading, value, percent, color, amount = false 
     <article className="widget">
       <div className="widgetInfo">
         <p>{heading}</p>
-        <h4>{amount ? `$${value}` : value}</h4>
+        <h4>{amount ? `$${value}`: value}</h4>
         {percent > 0 ? (
           <span className="green">
             <HiTrendingUp /> + {percent}% {""}
