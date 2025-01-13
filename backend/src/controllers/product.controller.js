@@ -295,8 +295,6 @@ if(product){
   }
 });
 
-
-
 const getlatestProducts = asyncHandler(async (req, res, next) => {
   try {
     let products;
@@ -513,18 +511,6 @@ const updateProduct = asyncHandler(async (req, res, next) => {
     return next(new ApiError(500, error.message, "Failed to update product"));
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const deleteProduct = asyncHandler(async (req, res, next) => {
