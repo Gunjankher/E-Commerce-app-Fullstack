@@ -6,6 +6,8 @@ import ProductCard from '../components/ProductCard'
 import { useLatestProductQuery } from '../redux/api/productApi'
 import { addToCart } from '../redux/reducer/cartReducer'
 import { server } from '../redux/store'
+import Carousel from '../components/Carousel'
+
 
 
 
@@ -34,10 +36,11 @@ toast.success("added to cart")
 
   return (
     <div className='home'>
+<Carousel />
 
 <section>
 </section>
-      <h1>latest Product
+      <h1 className='bg-amber-400'>latest Product
       <Link to="/search" className='findmore'>
       More
   </Link>
