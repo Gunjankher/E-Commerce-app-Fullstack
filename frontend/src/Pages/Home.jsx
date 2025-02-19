@@ -40,8 +40,8 @@ toast.success("added to cart")
 
 <section>
 </section>
-      <h1 className='bg-amber-400'>latest Product
-      <Link to="/search" className='findmore'>
+      <h1>latest Product
+      <Link to="/search" className='findmore' >
       More
   </Link>
       </h1> 

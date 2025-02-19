@@ -6,9 +6,9 @@ import "swiper/css/navigation"
 
 function Carousel() {
   return (
-    <div className='h-[700px]'>
+    <div className='h-52 w-full flex items-center justify-center ml-[150px] relative left-8'>
       <Swiper
-        className='h-20'
+        className='h-64'
         navigation={true}
         spaceBetween={0}
         pagination={{
@@ -33,7 +33,7 @@ function Carousel() {
         <SwiperSlide><img src="../images/carousel_5.jpg" alt="" /></SwiperSlide>
       </Swiper>
 
-      <div className='bg-stone-300 h-[300px] w-full'></div>
+      <div></div>
     </div>
 
   )
